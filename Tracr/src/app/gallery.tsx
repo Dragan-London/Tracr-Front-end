@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable, Modal, StyleSheet, Image } from "react-native";
+import { View, Text, FlatList, Pressable, Modal, StyleSheet, Image, ImageBackground } from "react-native";
 import { useState } from "react";
 
 export default function Shapes() {
@@ -26,8 +26,12 @@ export default function Shapes() {
 
   }
 
+  const bgImage1 = "https://thumbs.dreamstime.com/b/run-icons-seamless-pattern-set-doodle-style-hand-drawing-45599886.jpg?w=768"
+  const bgImage2 = "https://thumbs.dreamstime.com/b/hand-draw-kids-doodle-background-objects-child-s-life-hand-draw-kids-doodle-background-objects-child-s-life-158629635.jpg"
+  const bgImage3 = "https://img.freepik.com/premium-vector/children-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg"
+  
   return (
-    <View>
+    <ImageBackground source={{ uri: bgImage1}} resizeMode="cover" imageStyle={{ opacity: 0.05 }} style={styles.backgroundImage}>
       <FlatList
         data={shapes}
         numColumns={3}
@@ -68,11 +72,16 @@ export default function Shapes() {
         </View>
 
       </Modal>
-    </View>
+    </ImageBackground>
+
   );
 }
 
 const styles = StyleSheet.create({
+
+  backgroundImage: {
+    flex: 1,
+  },
 
   card: {
     flex: 1,
@@ -95,35 +104,35 @@ const styles = StyleSheet.create({
   },
 
   modalBackground: {
-  flex: 1,
-  backgroundColor: "rgba(0,0,0,0.4)",
-  justifyContent: "center",
-  alignItems: "center"
-},
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center"
+  },
 
-modalBox: {
-  backgroundColor: "white",
-  padding: 20,
-  borderRadius: 12,
-  alignItems: "center",
-  width: 220
-},
+  modalBox: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    width: 220
+  },
 
-modalImage: {
-  width: 80,
-  height: 80,
-  marginBottom: 10
-},
+  modalImage: {
+    width: 80,
+    height: 80,
+    marginBottom: 10
+  },
 
-modalText: {
-  fontSize: 16,
-  marginBottom: 15
-},
+  modalText: {
+    fontSize: 16,
+    marginBottom: 15
+  },
 
-confirmButton: {
-  backgroundColor: "#ddd",
-  padding: 10,
-  borderRadius: 8,
-  marginBottom: 10
-}
+  confirmButton: {
+    backgroundColor: "#ddd",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10
+  }
 });
