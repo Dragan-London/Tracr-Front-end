@@ -72,23 +72,30 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     marginBottom: 5,
+    fontFamily: "ui-monospace",
   },
   image: {
     width: 300,
     height: 300,
     alignSelf: "center",
-    paddingVertical: 10, // 0.6em ≈ 10px (based on 18px font size)
-    paddingHorizontal: 23, // 1.3em ≈ 23px
+    paddingVertical: 10,
+    paddingHorizontal: 23,
     marginBottom: 10,
     borderWidth: 3,
-    borderColor: "black",
-    borderRadius: 7, // 0.4em ≈ 7px
+    borderColor: "#b3b3b4",
+    borderRadius: 12,
     shadowColor: "black",
-    shadowOffset: { width: 2, height: 2 }, // 0.1em ≈ 2px
+    shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: 2, // Android shadow
+    elevation: 2,
     textAlign: "center",
+    offsetX: 10,
+    offsetY: -3,
+    blurRadius: "15px",
+    spreadDistance: "10px",
+    color: "red",
+    inset: true,
   },
   titleContainer: {
     flexDirection: "row",
@@ -127,6 +134,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
   },
   buttonText: {
-    fontFamily: "monocle",
+    fontFamily: "ui-monospace",
   },
 });
