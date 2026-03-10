@@ -32,9 +32,9 @@ export default function Shapes() {
   const bgImage1 = "https://thumbs.dreamstime.com/b/run-icons-seamless-pattern-set-doodle-style-hand-drawing-45599886.jpg?w=768"
   const bgImage2 = "https://thumbs.dreamstime.com/b/hand-draw-kids-doodle-background-objects-child-s-life-hand-draw-kids-doodle-background-objects-child-s-life-158629635.jpg"
   const bgImage3 = "https://img.freepik.com/premium-vector/children-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg"
-  
+
   return (
-    <ImageBackground source={{ uri: bgImage1}} resizeMode="cover" imageStyle={{ opacity: 0.05 }} style={styles.backgroundImage}>
+    <ImageBackground source={{ uri: bgImage3 }} resizeMode="cover" imageStyle={{ opacity: 0.1 }} style={styles.backgroundImage}>
       <FlatList
         data={shapes}
         numColumns={3}
@@ -43,7 +43,6 @@ export default function Shapes() {
             style={styles.card}
             onPress={() => handleSelection(item)}>
             <Image source={{ uri: item.image_url }} style={styles.image} />
-            <Text>{item.name}</Text>
           </Pressable>
 
         } />
@@ -61,13 +60,22 @@ export default function Shapes() {
             </Text>
 
             <Pressable
-              style={styles.confirmButton}
               onPress={() => handleConfirm(selectedShape)}
+              style={({ pressed }) => [
+                styles.button,
+                pressed && styles.buttonPressed,
+                styles.startButton,
+              ]}
             >
-              <Text>Confirm</Text>
+              <Text>Start</Text>
             </Pressable>
 
-            <Pressable onPress={() => setModalVisible(false)}>
+            <Pressable onPress={() => setModalVisible(false)}
+              style={({ pressed }) => [
+                styles.button,
+                pressed && styles.buttonPressed,
+                styles.cancelButton,
+              ]}>
               <Text>Cancel</Text>
             </Pressable>
           </View>
@@ -93,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: "white",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   icon: {
@@ -132,10 +140,41 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
 
-  confirmButton: {
-    backgroundColor: "#ddd",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10
-  }
+  startButton: {
+    backgroundColor: "#5CFD5C",
+    textAlign: "center",
+  },
+
+  cancelButton: {
+    backgroundColor: "#cdcecd",
+    textAlign: "center",
+  },
+
+  button: {
+    paddingVertical: 10, // 0.6em ≈ 10px (based on 18px font size)
+    paddingHorizontal: 23, // 1.3em ≈ 23px
+    marginBottom: 10,
+    fontWeight: "900",
+    fontSize: 18,
+    borderWidth: 3,
+    borderColor: "black",
+    borderRadius: 7, // 0.4em ≈ 7px
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 }, // 0.1em ≈ 2px
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 2, // Android shadow
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    color: "black",
+  },
+  buttonPressed: {
+    transform: [{ translateX: 1 }, { translateY: 1 }],
+    shadowOffset: { width: 1, height: 1 },
+  },
+  buttonText: {
+    fontFamily: "ui-monospace",
+  },
 });
