@@ -1,9 +1,11 @@
 import { View, Text, FlatList, Pressable, Modal, StyleSheet, Image, ImageBackground } from "react-native";
+import { useNavigation } from "expo-router";
 import { useState } from "react";
 
 export default function Shapes() {
   const [selectedShape, setSelectedShape] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   const shapes = [
     { id: 1, name: "Star", image_url: "https://images.emojiterra.com/google/android-10/512px/2b50.png" },
@@ -23,7 +25,8 @@ export default function Shapes() {
   }
 
   const handleConfirm = (shape) => {
-
+    setModalVisible(false);
+    navigation.navigate("map");
   }
 
   const bgImage1 = "https://thumbs.dreamstime.com/b/run-icons-seamless-pattern-set-doodle-style-hand-drawing-45599886.jpg?w=768"
@@ -59,7 +62,7 @@ export default function Shapes() {
 
             <Pressable
               style={styles.confirmButton}
-              onPress={() => setModalVisible(false)}
+              onPress={() => handleConfirm(selectedShape)}
             >
               <Text>Confirm</Text>
             </Pressable>
