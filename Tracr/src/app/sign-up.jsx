@@ -5,7 +5,7 @@ import { ThemedText } from "@/src/components/themed-text";
 export default function SignUpScreen() {
   return (
     <View style={styles.container}>
-      <ThemedText type="title">Sign Up</ThemedText>
+      <ThemedText type="title">Sign Up Page</ThemedText>
     </View>
   );
 }
