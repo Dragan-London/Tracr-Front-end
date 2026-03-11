@@ -25,12 +25,8 @@ export default function RootLayout() {
           options={{ presentation: "modal", title: "Modal" }}
         />
         <Stack.Screen name="sign-up" options={{ title: "Sign Up" }} />
-        <Stack.Screen name="main" options={{ title: "Main" }} />
         <Stack.Screen name="map" options={{ title: "Map" }} />
         <Stack.Screen name="post-drawing" options={{ title: "Post Drawing" }} />
-        <Stack.Screen name="stats" options={{ title: "Stats" }} />
-        <Stack.Screen name="collection" options={{ title: "Collection" }} />
-        <Stack.Screen name="leaderboard" options={{ title: "Leaderboard" }} />
         <Stack.Screen name="gallery" options={{ title: "Gallery" }} />
       </Stack>
       <StatusBar style="auto" />

@@ -35,6 +35,33 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="collection"
+        options={{
+          title: "Collection",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="square.grid.2x2.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="stats"
+        options={{
+          title: "Stats",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="chart.bar.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="leaderboard"
+        options={{
+          title: "Leaderboard",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="trophy.fill" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

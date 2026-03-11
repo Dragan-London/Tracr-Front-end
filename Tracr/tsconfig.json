@@ -4,15 +4,25 @@
     "strict": true,
     "allowJs": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.js",
-    "src/app/(tabs)/main.jsx", ".expo/types/router.d.js", "src/hooks/use-theme-color.js", "src/hooks/use-color-scheme.web.js", "src/hooks/use-color-scheme.js", "src/constants/theme.js", "src/components/themed-view.jsx", "src/components/themed-text.jsx", "src/components/parallax-scroll-view.jsx", "src/components/hello-wave.jsx", "src/components/haptic-tab.jsx", "src/components/external-link.jsx", "src/components/ui/icon-symbol.jsx", "src/components/ui/icon-symbol.ios.jsx", "src/components/ui/collapsible.jsx", "src/app/stats.jsx", "src/app/sign-up.jsx", "src/app/post-drawing.jsx", "src/app/modal.jsx", "src/app/map.jsx", "src/app/main.jsx", "src/app/leaderboard.jsx", "src/app/collection.jsx", "src/app/_layout.jsx", "src/app/(tabs)/explore.jsx", "src/app/(tabs)/_layout.jsx"  ]
+    "expo-env.d.ts",
+    "src/app/(tabs)/main.jsx",
+    "src/app/(tabs)/_layout.jsx",
+    "src/app/sign-up.jsx",
+    "src/app/post-drawing.jsx",
+    "src/app/modal.jsx",
+    "src/app/map.jsx",
+    "src/app/index.jsx",
+    "src/app/_layout.jsx",
+    "src/app/(tabs)/stats.jsx",
+    "src/app/(tabs)/leaderboard.jsx",
+    "src/app/(tabs)/explore.jsx",
+    "src/app/(tabs)/collection.jsx"
+  ]
 }
