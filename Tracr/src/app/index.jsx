@@ -5,7 +5,7 @@ import { ThemedText } from "@/src/components/themed-text";
 export default function MainScreen() {
   return (
     <View style={styles.container}>
-      <ThemedText type="title">Main</ThemedText>
+      <ThemedText type="title">Log in page</ThemedText>
     </View>
   );
 }

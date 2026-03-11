@@ -13,7 +13,7 @@ const pages = [
   { label: "Collection", route: "/collection" },
   { label: "Leaderboard", route: "/leaderboard" },
   { label: "Gallery", route: "/gallery" },
-] as const;
+];
 
 export default function TabTwoScreen() {
   return (
@@ -25,7 +25,7 @@ export default function TabTwoScreen() {
         <TouchableOpacity
           key={page.route}
           style={styles.button}
-          onPress={() => router.push(page.route as any)}
+          onPress={() => router.push(page.route)}
         >
           <ThemedText type="defaultSemiBold">{page.label}</ThemedText>
         </TouchableOpacity>

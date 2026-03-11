@@ -4,9 +4,7 @@
     "strict": true,
     "allowJs": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -14,5 +12,17 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "src/app/(tabs)/main.jsx"  ]
+    "src/app/(tabs)/main.jsx",
+    "src/app/(tabs)/_layout.jsx",
+    "src/app/sign-up.jsx",
+    "src/app/post-drawing.jsx",
+    "src/app/modal.jsx",
+    "src/app/map.jsx",
+    "src/app/index.jsx",
+    "src/app/_layout.jsx",
+    "src/app/(tabs)/stats.jsx",
+    "src/app/(tabs)/leaderboard.jsx",
+    "src/app/(tabs)/explore.jsx",
+    "src/app/(tabs)/collection.jsx"
+  ]
 }

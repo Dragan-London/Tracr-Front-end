@@ -27,18 +27,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="main"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
-        name="gallery"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
