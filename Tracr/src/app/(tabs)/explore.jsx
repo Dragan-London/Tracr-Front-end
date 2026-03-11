@@ -12,7 +12,7 @@ const pages = [
   { label: "Stats", route: "/stats" },
   { label: "Collection", route: "/collection" },
   { label: "Leaderboard", route: "/leaderboard" },
-  { label: "Gallery", route: "/gallery" },
+  { label: "Library", route: "/library" },
 ];
 
 export default function TabTwoScreen() {
