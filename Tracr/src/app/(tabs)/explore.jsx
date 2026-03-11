@@ -8,7 +8,7 @@ const pages = [
   { label: "Sign Up", route: "/sign-up" },
   { label: "Main", route: "/main" },
   { label: "Map", route: "/map" },
-  { label: "Post Drawing", route: "/post-drawing" },
+  { label: "Results", route: "/results" },
   { label: "Stats", route: "/stats" },
   { label: "Collection", route: "/collection" },
   { label: "Leaderboard", route: "/leaderboard" },
