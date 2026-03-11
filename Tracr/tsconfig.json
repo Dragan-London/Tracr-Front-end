@@ -15,7 +15,7 @@
     "src/app/(tabs)/main.jsx",
     "src/app/(tabs)/_layout.jsx",
     "src/app/sign-up.jsx",
-    "src/app/post-drawing.jsx",
+    "src/app/results.jsx",
     "src/app/modal.jsx",
     "src/app/map.jsx",
     "src/app/index.jsx",
