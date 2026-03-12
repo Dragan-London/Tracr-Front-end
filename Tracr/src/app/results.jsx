@@ -7,7 +7,6 @@ export default function ResultsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const [points, setPoints] = useState(0);
-  const [shareModalVisible, setShareModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleSave = () => {
@@ -28,8 +27,8 @@ export default function ResultsScreen() {
     }
   }
 
-  const slideRightAnim = useAnimatedValue(-100)
-  const slideLeftAnim = useAnimatedValue(100)
+  const slideRightAnim = useAnimatedValue(-180)
+  const slideLeftAnim = useAnimatedValue(180)
   const accuracyAnim = useAnimatedValue(0);
   const pointsAnim = useAnimatedValue(0);
   const saveAnim = useAnimatedValue(0);
@@ -130,6 +129,7 @@ export default function ResultsScreen() {
         <ThemedText style={styles.pointsText}>{points} POINTS</ThemedText>
       </View>
 
+<View style={styles.actionButtonsContainer}>
       <Animated.View style={{ opacity: saveAnim }}>
         <Pressable
           onPress={() => handleSave()}
@@ -142,6 +142,7 @@ export default function ResultsScreen() {
         </Pressable>
       </Animated.View>
 
+
       <Animated.View style={{ opacity: retryAnim }}>
         <Pressable
           onPress={() => handleRetry()}
@@ -153,7 +154,7 @@ export default function ResultsScreen() {
           <ThemedText>Retry</ThemedText>
         </Pressable>
       </Animated.View>
-
+</View>
       <Animated.View style={{ opacity: shareAnim }}>
         <Pressable
           onPress={() => handleShare()}
@@ -165,18 +166,6 @@ export default function ResultsScreen() {
           <ThemedText>Share</ThemedText>
         </Pressable>
       </Animated.View>
-
-      <Modal visible={modalVisible} transparent={true}>
-        <View style={styles.modalBackground}>
-          <View style={styles.modalBox}>
-            <ThemedText>[insert icons]</ThemedText>
-            <Pressable
-              onPress={() => setModalVisible(false)}>
-              <ThemedText>Cancel</ThemedText>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
 
     </View>
   );
@@ -224,6 +213,12 @@ const styles = StyleSheet.create({
 
   pointsText: {
     fontSize: 18
+  },
+
+  actionButtonsContainer: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 10,
   },
 
   saveButton: {
