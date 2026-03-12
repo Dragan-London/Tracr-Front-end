@@ -1,10 +1,12 @@
-import { StyleSheet, View, Pressable, Image, Modal, ImageBackground, Animated, useAnimatedValue} from "react-native";
+import { StyleSheet, View, Pressable, Image, Modal, ImageBackground, Animated, useAnimatedValue } from "react-native";
 import { useNavigation } from "expo-router";
 import { ThemedText } from "@/src/components/themed-text";
 import { useEffect, useState } from "react";
 
 export default function ResultsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [accuracy, setAccuracy] = useState(0);
+  const [points, setPoints] = useState(0);
   const navigation = useNavigation();
 
   const handleSave = () => {
@@ -19,24 +21,55 @@ export default function ResultsScreen() {
     setModalVisible(true)
   }
 
-  const slideRightAnim = useAnimatedValue(-150)
-  const slideLeftAnim = useAnimatedValue(150)
+  const slideRightAnim = useAnimatedValue(-100)
+  const slideLeftAnim = useAnimatedValue(100)
+  const accuracyAnim = useAnimatedValue(0);
+  const pointsAnim = useAnimatedValue(0);
+
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(slideRightAnim, {
-      toValue: 0,
-      duration: 3000,
-      useNativeDriver: true,
-    }),
-      Animated.timing(slideLeftAnim, {
-      toValue: 0,
-      duration: 3000,
-      useNativeDriver: true,
-      }),
-    ]).start();
-  }, []);
+    const accuracyListener = accuracyAnim.addListener(({ value }) => {
+      setAccuracy(Math.floor(value));
+    })
 
+    const pointsListener = pointsAnim.addListener(({ value }) => {
+      setPoints(Math.floor(value));
+    });
+    Animated.sequence([
+
+      Animated.parallel([
+        Animated.timing(slideRightAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideLeftAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(accuracyAnim, {
+          toValue: 73,
+          duration: 2500,
+          useNativeDriver: false,
+        })
+      ]),
+
+      Animated.delay(300),
+
+      Animated.timing(pointsAnim, {
+        toValue: 2000,
+        duration: 2000,
+        useNativeDriver: false,
+      })
+    ]).start();
+
+    return () => {
+      accuracyAnim.removeListener(accuracyListener);
+      pointsAnim.removeListener(pointsListener)
+    };
+
+  }, []);
 
 
   return (
@@ -48,22 +81,24 @@ export default function ResultsScreen() {
       />
       <View style={styles.imagesContainer}>
 
-      <Animated.Image
-        source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
-        style={[
-          styles.userRoute, 
-        {transform: [{translateX: slideRightAnim}]},]} />
+        <Animated.Image
+          source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
+          style={[
+            styles.userRoute,
+            { transform: [{ translateX: slideRightAnim }] },]} />
 
-      <Animated.Image source={require("@/assets/images/red-outline-heart2.jpg")}
-        style={[
-          styles.targetRoute, 
-        {transform: [{translateX: slideLeftAnim}]},]} />
+        <Animated.Image source={require("@/assets/images/red-outline-heart2.jpg")}
+          style={[
+            styles.targetRoute,
+            { transform: [{ translateX: slideLeftAnim }] },]} />
 
       </View>
 
+      <View style={styles.scoresContainer}>
+        <ThemedText>{accuracy}% MATCH</ThemedText>
+        <ThemedText>{points} POINTS</ThemedText>
+      </View>
 
-      <ThemedText>73% MATCH</ThemedText>
-      <ThemedText>2000 POINTS</ThemedText>
 
       <Pressable
         onPress={() => handleSave()}
@@ -142,6 +177,11 @@ const styles = StyleSheet.create({
     height: 200,
     position: "absolute",
     opacity: 0.5,
+  },
+
+  scoresContainer: {
+    marginVertical: 25,
+    alignItems: "center",
   },
 
   saveButton: {
