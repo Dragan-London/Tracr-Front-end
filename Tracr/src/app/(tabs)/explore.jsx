@@ -6,13 +6,13 @@ import { ThemedText } from "@/src/components/themed-text";
 const pages = [
   { label: "Home", route: "/(tabs)/" },
   { label: "Sign Up", route: "/sign-up" },
-  { label: "Main", route: "/main" },
+  { label: "Login", route: "../login" },
   { label: "Map", route: "/map" },
   { label: "Post Drawing", route: "/post-drawing" },
   { label: "Stats", route: "/stats" },
   { label: "Collection", route: "/collection" },
   { label: "Leaderboard", route: "/leaderboard" },
-  { label: "Gallery", route: "/gallery" },
+  { label: "Library", route: "/library" },
 ];
 
 export default function TabTwoScreen() {

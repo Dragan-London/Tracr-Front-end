@@ -24,10 +24,11 @@ export default function RootLayout() {
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
         />
+        <Stack.Screen name="login" options={{ title: "Login" }} />
         <Stack.Screen name="sign-up" options={{ title: "Sign Up" }} />
         <Stack.Screen name="map" options={{ title: "Map" }} />
         <Stack.Screen name="post-drawing" options={{ title: "Post Drawing" }} />
-        <Stack.Screen name="gallery" options={{ title: "Gallery" }} />
+        <Stack.Screen name="library" options={{ title: "Library" }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

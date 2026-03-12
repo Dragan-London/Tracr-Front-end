@@ -1,19 +1,5 @@
-import { StyleSheet, View } from "react-native";
+import { Redirect } from "expo-router";
 
-import { ThemedText } from "@/src/components/themed-text";
-
-export default function MainScreen() {
-  return (
-    <View style={styles.container}>
-      <ThemedText type="title">Log in page</ThemedText>
-    </View>
-  );
+export default function Index() {
+  return <Redirect href="/login" />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

@@ -4,6 +4,7 @@ import { router } from "expo-router";
 
 export default function SignUpScreen() {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
 
@@ -12,7 +13,7 @@ export default function SignUpScreen() {
       alert("Passwords do not match!");
       return;
     }
-    console.log("submitted:", { name, password });
+    console.log("submitted:", { name, email, password });
   }
 
   return (
@@ -24,6 +25,14 @@ export default function SignUpScreen() {
         placeholder="Name"
         value={name}
         onChangeText={setName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
