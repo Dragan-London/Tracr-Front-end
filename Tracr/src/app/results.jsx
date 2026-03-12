@@ -32,7 +32,9 @@ export default function ResultsScreen() {
   const slideLeftAnim = useAnimatedValue(100)
   const accuracyAnim = useAnimatedValue(0);
   const pointsAnim = useAnimatedValue(0);
-
+  const saveAnim = useAnimatedValue(0);
+  const retryAnim = useAnimatedValue(0);
+  const shareAnim = useAnimatedValue(0);
 
   useEffect(() => {
     const accuracyListener = accuracyAnim.addListener(({ value }) => {
@@ -68,7 +70,30 @@ export default function ResultsScreen() {
         toValue: 2000,
         duration: 2000,
         useNativeDriver: false,
-      })
+      }),
+
+      Animated.delay(300),
+
+      Animated.stagger(400, [
+        Animated.timing(saveAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(retryAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shareAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+
+
+      ])
+
     ]).start();
 
     return () => {
@@ -86,8 +111,8 @@ export default function ResultsScreen() {
         resizeMode="cover"
         style={styles.backgroundImage}
       />
-      <View style={styles.imagesContainer}>
 
+      <View style={styles.imagesContainer}>
         <Animated.Image
           source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
           style={[
@@ -98,46 +123,48 @@ export default function ResultsScreen() {
           style={[
             styles.targetRoute,
             { transform: [{ translateX: slideLeftAnim }] },]} />
-
       </View>
 
       <View style={styles.scoresContainer}>
-        <ThemedText>{accuracy}% MATCH</ThemedText>
-        <ThemedText>{points} POINTS</ThemedText>
+        <ThemedText style={styles.accuracyText}>{accuracy}% MATCH</ThemedText>
+        <ThemedText style={styles.pointsText}>{points} POINTS</ThemedText>
       </View>
 
+      <Animated.View style={{ opacity: saveAnim }}>
+        <Pressable
+          onPress={() => handleSave()}
+          style={({ pressed }) => [
+            styles.button,
+            pressed && styles.buttonPressed,
+            styles.saveButton
+          ]}>
+          <ThemedText>Save</ThemedText>
+        </Pressable>
+      </Animated.View>
 
-      <Pressable
-        onPress={() => handleSave()}
-        style={({ pressed }) => [
-          styles.button,
-          pressed && styles.buttonPressed,
-          styles.saveButton,
-        ]}>
-        <ThemedText>Save</ThemedText>
-      </Pressable>
+      <Animated.View style={{ opacity: retryAnim }}>
+        <Pressable
+          onPress={() => handleRetry()}
+          style={({ pressed }) => [
+            styles.button,
+            pressed && styles.buttonPressed,
+            styles.retryButton,
+          ]}>
+          <ThemedText>Retry</ThemedText>
+        </Pressable>
+      </Animated.View>
 
-
-      <Pressable
-        onPress={() => handleRetry()}
-        style={({ pressed }) => [
-          styles.button,
-          pressed && styles.buttonPressed,
-          styles.retryButton,
-        ]}>
-        <ThemedText>Retry</ThemedText>
-      </Pressable>
-
-
-      <Pressable
-        onPress={() => handleShare()}
-        style={({ pressed }) => [
-          styles.button,
-          pressed && styles.buttonPressed,
-          styles.shareButton,
-        ]}>
-        <ThemedText>Share</ThemedText>
-      </Pressable>
+      <Animated.View style={{ opacity: shareAnim }}>
+        <Pressable
+          onPress={() => handleShare()}
+          style={({ pressed }) => [
+            styles.button,
+            pressed && styles.buttonPressed,
+            styles.shareButton,
+          ]}>
+          <ThemedText>Share</ThemedText>
+        </Pressable>
+      </Animated.View>
 
       <Modal visible={modalVisible} transparent={true}>
         <View style={styles.modalBackground}>
@@ -189,6 +216,14 @@ const styles = StyleSheet.create({
   scoresContainer: {
     marginVertical: 25,
     alignItems: "center",
+  },
+
+  accuracyText: {
+    fontSize: 24,
+  },
+
+  pointsText: {
+    fontSize: 18
   },
 
   saveButton: {
