@@ -1,7 +1,7 @@
-import { StyleSheet, View, Pressable, Image, Modal, ImageBackground } from "react-native";
+import { StyleSheet, View, Pressable, Image, Modal, ImageBackground, Animated, useAnimatedValue} from "react-native";
 import { useNavigation } from "expo-router";
 import { ThemedText } from "@/src/components/themed-text";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ResultsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -19,6 +19,26 @@ export default function ResultsScreen() {
     setModalVisible(true)
   }
 
+  const slideRightAnim = useAnimatedValue(-150)
+  const slideLeftAnim = useAnimatedValue(150)
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(slideRightAnim, {
+      toValue: 0,
+      duration: 3000,
+      useNativeDriver: true,
+    }),
+      Animated.timing(slideLeftAnim, {
+      toValue: 0,
+      duration: 3000,
+      useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -26,17 +46,24 @@ export default function ResultsScreen() {
         resizeMode="cover"
         style={styles.backgroundImage}
       />
-      <Image
-        source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
-        style={styles.userRoute} />
+      <View style={styles.imagesContainer}>
 
-      <Image source={require("@/assets/images/red-outline-heart2.jpg")}
-        style={styles.targetRoute} />
+      <Animated.Image
+        source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
+        style={[
+          styles.userRoute, 
+        {transform: [{translateX: slideRightAnim}]},]} />
+
+      <Animated.Image source={require("@/assets/images/red-outline-heart2.jpg")}
+        style={[
+          styles.targetRoute, 
+        {transform: [{translateX: slideLeftAnim}]},]} />
+
+      </View>
+
 
       <ThemedText>73% MATCH</ThemedText>
       <ThemedText>2000 POINTS</ThemedText>
-
-
 
       <Pressable
         onPress={() => handleSave()}
@@ -93,19 +120,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
+  imagesContainer: {
+    height: 200,
+    width: 200,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
     opacity: 0.1,
   },
 
   userRoute: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
   },
 
   targetRoute: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
+    position: "absolute",
+    opacity: 0.5,
   },
 
   saveButton: {
@@ -157,6 +193,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     color: "black",
+    width: 150,
   },
 
   buttonPressed: {
@@ -165,191 +202,3 @@ const styles = StyleSheet.create({
   }
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-// import { StyleSheet, View, Pressable, Text, Animated } from "react-native";
-// import { ThemedText } from "@/src/components/themed-text";
-// import { useNavigation } from "expo-router";
-// import { useRef, useEffect } from "react";
-
-// export default function ResultsScreen() {
-
-//   const navigation = useNavigation();
-
-
-//   const leftX = useRef(new Animated.Value(-150)).current;
-// const rightX = useRef(new Animated.Value(150)).current;
-
-// useEffect(() => {
-//   Animated.parallel([
-//     Animated.timing(leftX, {
-//       toValue: 0,
-//       duration: 2000,
-//       useNativeDriver: true,
-//     }),
-//     Animated.timing(rightX, {
-//       toValue: 0,
-//       duration: 1000,
-//       useNativeDriver: true,
-//     }),
-//   ]).start();
-// }, []);
-
-
-//   const handleSave = () => {
-//     navigation.navigate("stats")
-//   }
-
-//   return (
-//     <View style={styles.container}>
-//       {/* <View>
-//         <Image 
-//         source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }} 
-//         style={styles.userRoute}/>
-
-//         <Image source={require("@/assets/images/red-outline-heart2.jpg")} 
-//         style={styles.targetRoute}/>
-//       </View> */}
-
-// <View style={styles.overlayContainer}>
-
-//   <Animated.Image
-//     source={require("@/assets/images/red-outline-heart2.jpg")}
-//     style={[
-//       styles.targetRoute,
-//       { transform: [{ translateX: leftX }] }
-//     ]}
-//   />
-
-//   <Animated.Image
-//     source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
-//     style={[
-//       styles.userRoute,
-//       { transform: [{ translateX: rightX }] }
-//     ]}
-//   />
-
-// </View>
-
-//       <Text>73% MATCH</Text>
-//       <Text>2000 POINTS</Text>
-
-
-//       <Pressable
-//         onPress={() => handleSave()}
-//         style={({ pressed }) => [
-//           styles.button,
-//           pressed && styles.buttonPressed,
-//           styles.saveButton,
-//         ]}>
-//         <Text>Save</Text>
-//       </Pressable>
-
-
-//       <Pressable
-//         onPress={() => setModalVisible(false)}
-//         style={({ pressed }) => [
-//           styles.button,
-//           pressed && styles.buttonPressed,
-//           styles.retryButton,
-//         ]}>
-//         <Text>Retry</Text>
-//       </Pressable>
-
-
-//       <Pressable
-//         onPress={() => setModalVisible(false)}
-//         style={({ pressed }) => [
-//           styles.button,
-//           pressed && styles.buttonPressed,
-//           styles.shareButton,
-//         ]}>
-//         <Text>Share</Text>
-//       </Pressable>
-
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-
-//   userRoute: {
-//     width: 100,
-//     height: 100,
-//   },
-
-//   targetRoute: {
-//     width: 100,
-//     height: 100,
-//   },
-
-//   overlayContainer: {
-//   width: 200,
-//   height: 200,
-//   justifyContent: "center",
-//   alignItems: "center",
-//   marginBottom: 30,
-// },
-
-//   routeImage: {
-//   position: "absolute",
-//   width: 200,
-//   height: 200,
-//   resizeMode: "contain",
-// },
-
-//   saveButton: {
-//     backgroundColor: "#84f984",
-//     textAlign: "center",
-//   },
-
-//   retryButton: {
-//     backgroundColor: "#cdcecd",
-//     textAlign: "center",
-//   },
-
-//   shareButton: {
-//     backgroundColor: "#5f98f3",
-//     textAlign: "center",
-//   },
-
-//   button: {
-//     paddingVertical: 10, // 0.6em ≈ 10px (based on 18px font size)
-//     paddingHorizontal: 23, // 1.3em ≈ 23px
-//     marginBottom: 10,
-//     fontWeight: "900",
-//     fontSize: 18,
-//     borderWidth: 3,
-//     borderColor: "black",
-//     borderRadius: 7, // 0.4em ≈ 7px
-//     shadowColor: "black",
-//     shadowOffset: { width: 2, height: 2 }, // 0.1em ≈ 2px
-//     shadowOpacity: 1,
-//     shadowRadius: 0,
-//     elevation: 2, // Android shadow
-//     textAlign: "center",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     alignContent: "center",
-//     color: "black",
-//   },
-//   buttonPressed: {
-//     transform: [{ translateX: 1 }, { translateY: 1 }],
-//     shadowOffset: { width: 1, height: 1 },
-//   },
-// });
