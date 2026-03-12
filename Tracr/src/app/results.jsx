@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, Image, Modal, ImageBackground, Animated, useAnimatedValue } from "react-native";
+import { StyleSheet, View, Pressable, Modal, ImageBackground, Animated, useAnimatedValue, Share } from "react-native";
 import { useNavigation } from "expo-router";
 import { ThemedText } from "@/src/components/themed-text";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ export default function ResultsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const [points, setPoints] = useState(0);
+  const [shareModalVisible, setShareModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleSave = () => {
@@ -17,8 +18,14 @@ export default function ResultsScreen() {
     navigation.navigate("map")
   }
 
-  const handleShare = () => {
-    setModalVisible(true)
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: "My Tracr run results"
+      });
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   }
 
   const slideRightAnim = useAnimatedValue(-100)
@@ -156,8 +163,8 @@ const styles = StyleSheet.create({
   },
 
   imagesContainer: {
-    height: 200,
-    width: 200,
+    height: 300,
+    width: 300,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -168,13 +175,13 @@ const styles = StyleSheet.create({
   },
 
   userRoute: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
   },
 
   targetRoute: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     position: "absolute",
     opacity: 0.5,
   },
