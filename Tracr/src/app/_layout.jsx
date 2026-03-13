@@ -27,7 +27,7 @@ export default function RootLayout() {
         <Stack.Screen name="login" options={{ title: "Login" }} />
         <Stack.Screen name="sign-up" options={{ title: "Sign Up" }} />
         <Stack.Screen name="map" options={{ title: "Map" }} />
-        <Stack.Screen name="post-drawing" options={{ title: "Post Drawing" }} />
+        <Stack.Screen name="results" options={{ title: "Results" }} />
         <Stack.Screen name="library" options={{ title: "Library" }} />
       </Stack>
       <StatusBar style="auto" />
