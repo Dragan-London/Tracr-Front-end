@@ -1,15 +1,15 @@
+import { Text } from "@react-navigation/elements";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   Image,
   Modal,
   Pressable,
   StyleSheet,
-  View,
   TextInput,
   useWindowDimensions,
+  View,
 } from "react-native";
-import { Text } from "@react-navigation/elements";
-import { router } from "expo-router";
 
 export default function MainScreen() {
   const { height } = useWindowDimensions();
@@ -42,7 +42,7 @@ export default function MainScreen() {
       }
       console.log("Logged in:", data);
       setModalVisible(false);
-      router.push("/main");
+      router.replace("/(tabs)");
     } catch (err) {
       setError(err.message);
     } finally {
