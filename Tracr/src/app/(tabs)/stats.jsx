@@ -1,3 +1,4 @@
+import DropDownMetrics from "@/src/components/DropDownMetrics";
 import { ImageBackground, StyleSheet, View } from "react-native";
 
 export default function StatsScreen() {
@@ -11,6 +12,7 @@ export default function StatsScreen() {
         resizeMode="cover"
         style={styles.backgroundImage}
       />
+      <DropDownMetrics />
     </View>
   );
 }
