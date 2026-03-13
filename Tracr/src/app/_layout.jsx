@@ -31,6 +31,7 @@ export default function RootLayout() {
         <Stack.Screen name="library" options={{ title: "Library" }} />
       </Stack>
       <StatusBar style="auto" />
+      <PortalHost />
     </ThemeProvider>
   );
 }
