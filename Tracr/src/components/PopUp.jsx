@@ -17,9 +17,8 @@ export default function PopUp({
   function handleFinish() {
     stopWatching();
     setModalVisible(!modalVisible);
-    router.push("/post-drawing");
+    router.push("/results");
     const timeElapsed = (Date.now() - start) / 1000;
-    console.log("I've stopped at ", timeElapsed);
   }
   return (
     <Modal
