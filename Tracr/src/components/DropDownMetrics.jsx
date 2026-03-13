@@ -1,0 +1,53 @@
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
+
+export default function DropDownMetrics() {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Score", value: "score" },
+    { label: "Distance", value: "distance" },
+    { label: "Time", value: "time" },
+  ]);
+
+  return (
+    <View style={styles.container}>
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        placeholder="Score"
+        listMode="SCROLLVIEW"
+        style={styles.dropdown}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 100,
+    paddingHorizontal: 20,
+    zIndex: 1000,
+  },
+  dropdown: {
+    borderWidth: 3,
+    borderColor: "black",
+    borderRadius: 7, // 0.4em ≈ 7px
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 }, // 0.1em ≈ 2px
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 2, // Android shadow
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    color: "black",
+    fontFamily: "ui-monospace",
+  },
+});
