@@ -4,16 +4,74 @@ import { router } from "expo-router";
 
 export default function SignUpScreen() {
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  function handleSubmit() {
-    if (password !== repeatPassword) {
-      alert("Passwords do not match!");
+  async function handleSubmit() {
+    setError(null);
+
+    if (
+      !name.trim() ||
+      !username.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !repeatPassword.trim()
+    ) {
+      setError("Please fill in all fields.");
       return;
     }
-    console.log("submitted:", { name, email, password });
+
+    if (name.length > 50) {
+      setError("Name must be less than 50 characters.");
+      return;
+    }
+    if (username.length > 25) {
+      setError("Username must be less than 25 characters.");
+      return;
+    }
+    if (password.length > 25) {
+      setError("Password must be less than 25 characters.");
+      return;
+    }
+    if (!email.includes("@")) {
+      setError("Password must include @");
+      return;
+    }
+    if (password !== repeatPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://tracr-c546.onrender.com/api/users/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password, name }),
+        },
+      );
+
+      const data = await response.json();
+      console.log("Response from server:", data);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Sign up failed");
+      }
+
+      router.back();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -25,6 +83,13 @@ export default function SignUpScreen() {
         placeholder="Name"
         value={name}
         onChangeText={setName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
@@ -51,8 +116,16 @@ export default function SignUpScreen() {
         textContentType="oneTimeCode"
       />
 
-      <Pressable style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Create Account</Text>
+      {error && <Text style={styles.errorText}>{error}</Text>}
+
+      <Pressable
+        style={styles.button}
+        onPress={handleSubmit}
+        disabled={isLoading}
+      >
+        <Text style={styles.buttonText}>
+          {isLoading ? "Creating account..." : "Create Account"}
+        </Text>
       </Pressable>
 
       <Pressable onPress={() => router.back()}>
@@ -102,5 +175,10 @@ const styles = StyleSheet.create({
   link: {
     color: "#888",
     textDecorationLine: "underline",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+    alignSelf: "flex-start",
   },
 });
