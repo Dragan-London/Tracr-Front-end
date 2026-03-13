@@ -1,6 +1,16 @@
 import { useState } from "react";
-import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  View,
+  TextInput,
+  Pressable,
+  Text,
+} from "react-native";
 import { router } from "expo-router";
+
+const backgroundImg =
+  "https://slack-imgs.com/?c=1&o1=ro&url=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fchildren-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg";
 
 export default function SignUpScreen() {
   const [name, setName] = useState("");
@@ -76,6 +86,11 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        src={backgroundImg}
+        resizeMode="cover"
+        style={styles.backgroundImage}
+      />
       <Text style={styles.title}>Sign Up</Text>
 
       <TextInput
@@ -141,6 +156,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.1,
   },
   title: {
     fontSize: 28,
