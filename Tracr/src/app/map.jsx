@@ -52,8 +52,6 @@ export default function MapScreen() {
     );
   }
 
-  // useEffect(() => setStart(Date.now()), []);
-
   useEffect(() => {
     async function setUserRegion() {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -76,10 +74,6 @@ export default function MapScreen() {
       setIsLoading(false);
     }
     setUserRegion();
-    // watchPosition();
-    // start = Date.now();
-    // date = new Date();
-    // console.log(`start time: ${start}, today: ${date}`);
   }, []);
 
   useEffect(() => {
@@ -116,16 +110,17 @@ export default function MapScreen() {
 
   if (isLoading) return <LoadingPage />;
 
-  // if (region) {
+
   return (
     <View style={styles.container}>
-      <MapView ref={mapRef} style={styles.map} initialRegion={region}>
-        {/* <Marker coordinate={region} title="You are here">
-          <Image
-            source={require("@/assets/images/letter-A-marker.png")}
-            style={styles.marker}
-          />
-        </Marker> */}
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={region}
+        showsUserLocation={true}
+        showsCompass={true}
+        showsMyLocationButton={true}
+      >
         <Polyline coordinates={coords} strokeColor="#FF4500" strokeWidth={10} />
       </MapView>
 
