@@ -15,6 +15,8 @@ export default function MapScreen() {
   const [coords, setCoords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [countdown, setCountdown] = useState(4);
+  const [trackingStarted, setTrackingStarted] = useState(false);
 
   const locationRef = useRef(null);
 
@@ -63,11 +65,31 @@ export default function MapScreen() {
       setIsLoading(false);
     }
     setUserRegion();
-    watchPosition();
-    start = Date.now();
-    date = new Date();
-    console.log(`start time: ${start}, today: ${date}`);
+    // watchPosition();
+    // start = Date.now();
+    // date = new Date();
+    // console.log(`start time: ${start}, today: ${date}`);
   }, []);
+
+  useEffect(() => {
+    if (trackingStarted) return;
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === 1) {
+          watchPosition();
+          setTrackingStarted(true);
+          start = Date.now();
+          date = new Date();
+          return 0;
+        }
+
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [trackingStarted]);
 
   const stopWatching = () => {
     if (!locationRef.current) return;
@@ -95,6 +117,13 @@ export default function MapScreen() {
         </Marker> */}
         <Polyline coordinates={coords} strokeColor="#FF4500" strokeWidth={10} />
       </MapView>
+
+      {countdown > 0 && (
+        <View style={styles.countdownOverlay}>
+          <Text style={styles.countdownText}>{countdown === 1 ? "GO!" : countdown - 1}</Text>
+        </View>
+      )}
+
       <PopUp
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -121,6 +150,23 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { flex: 1, height: "100%", width: "100%" },
+
+  countdownOverlay: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+  countdownText: {
+    fontSize: 80,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+
   loadingImage: {
     resizeMode: "cover",
     width: 300,
