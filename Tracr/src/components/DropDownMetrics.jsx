@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
-export default function DropDownMetrics() {
+export default function DropDownMetrics({ setMetric }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -23,6 +23,7 @@ export default function DropDownMetrics() {
         placeholder="Score"
         listMode="SCROLLVIEW"
         style={styles.dropdown}
+        onChangeValue={(value) => setMetric(value)}
       />
     </View>
   );
@@ -30,9 +31,8 @@ export default function DropDownMetrics() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
-    paddingHorizontal: 20,
-    zIndex: 1000,
+    width: "100%",
+    alignSelf: "center",
   },
   dropdown: {
     borderWidth: 3,
@@ -49,5 +49,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     color: "black",
     fontFamily: "ui-monospace",
+    width: "100%",
+    fontSize: "40",
   },
 });
