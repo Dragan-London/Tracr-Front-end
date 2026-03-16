@@ -8,6 +8,7 @@ export default function PopUp({
   watchPosition,
   stopWatching,
   start,
+  selectedShape
 }) {
   function handleResume() {
     watchPosition();
@@ -17,7 +18,13 @@ export default function PopUp({
   function handleFinish() {
     stopWatching();
     setModalVisible(!modalVisible);
-    router.push("/results");
+    router.push({
+      pathname: "/results",
+      params: {
+        shape: JSON.stringify(selectedShape),
+        // runCoords: JSON.stringify(runCoords),
+      },
+    });
     const timeElapsed = (Date.now() - start) / 1000;
   }
   return (
