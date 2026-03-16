@@ -25,9 +25,9 @@ export default function MapScreen() {
 
     locationRef.current = await Location.watchPositionAsync(
       {
-        accuracy: Location.Accuracy.Highest,
-        distanceInterval: 1,
-        timeInterval: 5000,
+        accuracy: Location.Accuracy.BestForNavigation,
+        distanceInterval: 3,
+        timeInterval: 2000,
       },
       (loc) => {
         setCoords((prev) => [
@@ -53,7 +53,7 @@ export default function MapScreen() {
       }
 
       const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: Location.Accuracy.Highest,
       });
 
       setRegion({
