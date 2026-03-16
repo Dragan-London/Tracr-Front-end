@@ -5,6 +5,8 @@ import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import MapView, { Polyline } from "react-native-maps";
+import { useLocalSearchParams } from "expo-router";
+
 
 let start;
 let date;
@@ -15,6 +17,9 @@ export default function MapScreen() {
   const [coords, setCoords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const { shape } = useLocalSearchParams();
+  const selectedShape = JSON.parse(shape);
 
   const locationRef = useRef(null);
 
@@ -101,6 +106,7 @@ export default function MapScreen() {
         watchPosition={watchPosition}
         stopWatching={stopWatching}
         start={start}
+        selectedShape={selectedShape}
       />
       <Pressable
         style={({ pressed }) => [
