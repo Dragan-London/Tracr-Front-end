@@ -3,7 +3,7 @@ import PopUp from "@/src/components/PopUp";
 import { Text } from "@react-navigation/elements";
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, Animated, useAnimatedValue, Easing } from "react-native";
 import MapView, { Polyline } from "react-native-maps";
 
 let start;
@@ -20,6 +20,34 @@ export default function MapScreen() {
 
   const locationRef = useRef(null);
   const mapRef = useRef(null);
+
+  const scaleAnim = useAnimatedValue(1);
+  const opacityAnim = useAnimatedValue(1);
+
+  useEffect(() => {
+    if (countdown === 0) return;
+
+    scaleAnim.setValue(1);
+    opacityAnim.setValue(1);
+
+    if (countdown === 1) return;
+
+    Animated.parallel([
+      Animated.timing(scaleAnim, {
+        toValue: 5,
+        duration: 800,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 750,
+        delay: 300,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, [countdown]);
+
 
   async function watchPosition() {
     if (locationRef.current) return;
@@ -91,7 +119,7 @@ export default function MapScreen() {
 
         return prev - 1;
       });
-    }, 1000);
+    }, 1300);
 
     return () => clearInterval(interval);
   }, [trackingStarted]);
@@ -126,7 +154,14 @@ export default function MapScreen() {
 
       {countdown > 0 && (
         <View style={styles.countdownOverlay}>
-          <Text style={styles.countdownText}>{countdown === 1 ? "GO!" : countdown - 1}</Text>
+          <Animated.Text style={[
+            styles.countdownText,
+            countdown === 1 && { fontSize: 100 },
+            {
+              opacity: opacityAnim,
+              transform: [{ scale: scaleAnim }]
+            }
+          ]}>{countdown === 1 ? "GO!" : countdown - 1}</Animated.Text>
         </View>
       )}
 
