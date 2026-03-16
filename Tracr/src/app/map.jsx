@@ -19,6 +19,7 @@ export default function MapScreen() {
   const [trackingStarted, setTrackingStarted] = useState(false);
 
   const locationRef = useRef(null);
+  const mapRef = useRef(null);
 
   async function watchPosition() {
     if (locationRef.current) return;
@@ -30,13 +31,23 @@ export default function MapScreen() {
         timeInterval: 2000,
       },
       (loc) => {
-        setCoords((prev) => [
-          ...prev,
-          {
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-          },
+        setCoords((prev) => [...prev, {
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude
+        },
         ]);
+
+        if (mapRef.current) {
+          mapRef.current.animateCamera(
+            {
+              center: {
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude
+              },
+            },
+            { duration: 700 }
+          );
+        }
       },
     );
   }
@@ -108,7 +119,7 @@ export default function MapScreen() {
   // if (region) {
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} initialRegion={region}>
+      <MapView ref={mapRef} style={styles.map} initialRegion={region}>
         {/* <Marker coordinate={region} title="You are here">
           <Image
             source={require("@/assets/images/letter-A-marker.png")}
