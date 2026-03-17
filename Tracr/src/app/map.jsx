@@ -3,8 +3,10 @@ import PopUp from "@/src/components/PopUp";
 import { Text } from "@react-navigation/elements";
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, Animated, useAnimatedValue, Easing } from "react-native";
 import MapView, { Polyline } from "react-native-maps";
+import { useLocalSearchParams } from "expo-router";
+
 
 let start;
 let date;
@@ -15,31 +17,73 @@ export default function MapScreen() {
   const [coords, setCoords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [countdown, setCountdown] = useState(4);
+  const [trackingStarted, setTrackingStarted] = useState(false);
+
+  const { shape } = useLocalSearchParams();
+  const selectedShape = JSON.parse(shape);
 
   const locationRef = useRef(null);
+  const mapRef = useRef(null);
+
+  const scaleAnim = useAnimatedValue(1);
+  const opacityAnim = useAnimatedValue(1);
+
+  useEffect(() => {
+    if (countdown === 0) return;
+
+    scaleAnim.setValue(1);
+    opacityAnim.setValue(1);
+
+    if (countdown === 1) return;
+
+    Animated.parallel([
+      Animated.timing(scaleAnim, {
+        toValue: 5,
+        duration: 800,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 750,
+        delay: 300,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, [countdown]);
+
 
   async function watchPosition() {
     if (locationRef.current) return;
 
     locationRef.current = await Location.watchPositionAsync(
       {
-        accuracy: Location.Accuracy.Highest,
-        distanceInterval: 1,
-        timeInterval: 5000,
+        accuracy: Location.Accuracy.BestForNavigation,
+        distanceInterval: 3,
+        timeInterval: 2000,
       },
       (loc) => {
-        setCoords((prev) => [
-          ...prev,
-          {
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-          },
+        setCoords((prev) => [...prev, {
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude
+        },
         ]);
+
+        if (mapRef.current) {
+          mapRef.current.animateCamera(
+            {
+              center: {
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude
+              },
+            },
+            { duration: 700 }
+          );
+        }
       },
     );
   }
-
-  // useEffect(() => setStart(Date.now()), []);
 
   useEffect(() => {
     async function setUserRegion() {
@@ -51,7 +95,7 @@ export default function MapScreen() {
       }
 
       const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: Location.Accuracy.Highest,
       });
 
       setRegion({
@@ -63,11 +107,27 @@ export default function MapScreen() {
       setIsLoading(false);
     }
     setUserRegion();
-    watchPosition();
-    start = Date.now();
-    date = new Date();
-    console.log(`start time: ${start}, today: ${date}`);
   }, []);
+
+  useEffect(() => {
+    if (trackingStarted) return;
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === 1) {
+          watchPosition();
+          setTrackingStarted(true);
+          start = Date.now();
+          date = new Date();
+          return 0;
+        }
+
+        return prev - 1;
+      });
+    }, 1300);
+
+    return () => clearInterval(interval);
+  }, [trackingStarted]);
 
   const stopWatching = () => {
     if (!locationRef.current) return;
@@ -83,24 +143,40 @@ export default function MapScreen() {
 
   if (isLoading) return <LoadingPage />;
 
-  // if (region) {
+
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} initialRegion={region}>
-        {/* <Marker coordinate={region} title="You are here">
-          <Image
-            source={require("@/assets/images/letter-A-marker.png")}
-            style={styles.marker}
-          />
-        </Marker> */}
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={region}
+        showsUserLocation={true}
+        showsCompass={true}
+        showsMyLocationButton={true}
+      >
         <Polyline coordinates={coords} strokeColor="#FF4500" strokeWidth={10} />
       </MapView>
+
+      {countdown > 0 && (
+        <View style={styles.countdownOverlay}>
+          <Animated.Text style={[
+            styles.countdownText,
+            countdown === 1 && { fontSize: 100 },
+            {
+              opacity: opacityAnim,
+              transform: [{ scale: scaleAnim }]
+            }
+          ]}>{countdown === 1 ? "GO!" : countdown - 1}</Animated.Text>
+        </View>
+      )}
+
       <PopUp
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         watchPosition={watchPosition}
         stopWatching={stopWatching}
         start={start}
+        selectedShape={selectedShape}
       />
       <Pressable
         style={({ pressed }) => [
@@ -121,6 +197,23 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { flex: 1, height: "100%", width: "100%" },
+
+  countdownOverlay: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+  countdownText: {
+    fontSize: 80,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+
   loadingImage: {
     resizeMode: "cover",
     width: 300,
