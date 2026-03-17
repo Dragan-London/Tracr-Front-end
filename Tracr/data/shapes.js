@@ -132,29 +132,31 @@ export const shapes = [
         id: 10,
         name: "heart",
         path: [
-            { x: 0.50, y: 0.85 },
-            { x: 0.38, y: 0.78 },
-            { x: 0.27, y: 0.70 },
-            { x: 0.20, y: 0.60 },
-            { x: 0.18, y: 0.49 },
-            { x: 0.19, y: 0.39 },
-            { x: 0.24, y: 0.31 },
-            { x: 0.31, y: 0.27 },
-            { x: 0.39, y: 0.26 },
-            { x: 0.445, y: 0.275 },
-            { x: 0.47, y: 0.315 },
-            { x: 0.50, y: 0.38 },
-            { x: 0.53, y: 0.315 },
-            { x: 0.555, y: 0.275 },
-            { x: 0.61, y: 0.26 },
-            { x: 0.69, y: 0.27 },
-            { x: 0.76, y: 0.31 },
-            { x: 0.81, y: 0.39 },
-            { x: 0.82, y: 0.49 },
-            { x: 0.80, y: 0.60 },
-            { x: 0.73, y: 0.70 },
-            { x: 0.62, y: 0.78 },
-            { x: 0.50, y: 0.85 },
+            { x: 0.50, y: 0.88 },  // bottom tip
+
+            { x: 0.36, y: 0.78 },
+            { x: 0.24, y: 0.66 },
+            { x: 0.18, y: 0.54 },
+            { x: 0.18, y: 0.42 },
+            { x: 0.24, y: 0.32 },
+
+            { x: 0.34, y: 0.26 },  // left curve outer
+            { x: 0.42, y: 0.26 },  // left top inner
+
+            { x: 0.47, y: 0.30 },
+            { x: 0.50, y: 0.36 },  // center dip
+
+            { x: 0.53, y: 0.30 },
+            { x: 0.58, y: 0.26 },  // right top inner
+            { x: 0.66, y: 0.26 },  // right curve outer
+
+            { x: 0.76, y: 0.32 },
+            { x: 0.82, y: 0.42 },
+            { x: 0.82, y: 0.54 },
+            { x: 0.76, y: 0.66 },
+
+            { x: 0.64, y: 0.78 },
+            { x: 0.50, y: 0.88 },  // close
         ]
     },
     {
@@ -223,5 +225,77 @@ export const shapes = [
 
             { x: 0.25, y: 0.4 },    // close
         ]
+    },
+    {
+        id: 14,
+        name: "airplane",
+        path: [
+            { x: 0.5, y: 0.05 },   // nose tip
+
+            { x: 0.56, y: 0.18 },  // upper right fuselage
+            { x: 0.58, y: 0.35 },  // wing root right
+            { x: 0.9, y: 0.55 },
+            { x: 0.9, y: 0.6 },   // right wing tip
+            { x: 0.58, y: 0.48 },  // trailing wing edge
+
+            { x: 0.55, y: 0.78 },   // lower right fuselage
+            { x: 0.65, y: 0.9 },    // right tail wing
+            { x: 0.5, y: 0.82 },   // tail center
+            { x: 0.35, y: 0.9 },    // left tail wing
+
+            { x: 0.45, y: 0.78 },   // lower left fuselage
+            { x: 0.42, y: 0.48 },  // trailing wing edge
+            { x: 0.1, y: 0.6 },
+            { x: 0.1, y: 0.55 },     // left wing tip
+            { x: 0.42, y: 0.35 },  // wing root left
+
+            { x: 0.44, y: 0.18 },  // upper left fuselage
+
+            { x: 0.5, y: 0.05 },   // close
+        ]
+    },
+    {
+        id: 15,
+        name: "house",
+        path: [
+            { x: 0.2, y: 0.5 },   // left wall
+            { x: 0.40, y: 0.23 },   // roof peak
+
+            // chimney
+            { x: 0.58, y: 0.23 },
+            { x: 0.58, y: 0.12 },
+            { x: 0.68, y: 0.12 },
+            { x: 0.68, y: 0.28 },
+
+            // roof down
+            { x: 0.8, y: 0.5 },   // right roof edge
+
+            { x: 0.8, y: 0.8 },   // right wall
+            { x: 0.2, y: 0.8 },   // bottom
+            { x: 0.2, y: 0.5 }    // close
+        ]
+    },
+    {
+        id: 16,
+        name: "sailboat",
+        path: [
+            { x: 0.15, y: 0.7 },   // hull left
+            { x: 0.85, y: 0.7 },   // hull right
+            { x: 0.7, y: 0.9 },   // hull bottom right
+            { x: 0.3, y: 0.9 },   // hull bottom left
+
+            { x: 0.15, y: 0.7 },   // close hull
+
+            { x: 0.5, y: 0.7 },    // mast bottom
+            { x: 0.5, y: 0.2 },    // mast top
+
+            { x: 0.8, y: 0.55 },   // sail outer
+            { x: 0.5, y: 0.55 },
+            { x: 0.5, y: 0.2 },    // sail tip
+            { x: 0.5, y: 0.7 },    // sail base
+
+            { x: 0.15, y: 0.7 },   // close
+        ]
     }
+
 ]

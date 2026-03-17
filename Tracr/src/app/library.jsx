@@ -52,6 +52,9 @@ export default function Shapes() {
     lightning: require("@/data/images/lightning.png"),
     butterfly: require("@/data/images/butterfly.png"),
     bear: require("@/data/images/bear.png"),
+    airplane: require("@/data/images/airplane.png"),
+    house: require("@/data/images/house.png"),
+    sailboat: require("@/data/images/sailboat.png"),
   };
 
   return (
