@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import { UserContext } from "@/src/contexts/UserContext";
 import {
   FlatList,
   ImageBackground,
+  Pressable,
   StyleSheet,
   Text,
   View,
@@ -45,11 +47,24 @@ function getExpeditionList(data) {
 }
 
 export default function CollectionScreen() {
+  const router = useRouter();
   const { user } = useContext(UserContext);
   const [expeditions, setExpeditions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userId = user && user.user_id;
+
+  function handleCardPress(expedition) {
+    router.push({
+      pathname: "/expedition-detail",
+      params: {
+        svg: expedition.svg || "",
+        title: expedition.title || "Expedition",
+        distance: String(expedition.distance || 0),
+        accuracy: String(expedition.accuracy || 0),
+      },
+    });
+  }
 
   useEffect(() => {
     if (!userId) {
@@ -105,10 +120,15 @@ export default function CollectionScreen() {
 
     return (
       <View style={styles.itemWrapper}>
-        <View style={styles.card}>
+        <Pressable style={styles.card} onPress={() => handleCardPress(item)}>
           {points ? (
-            <View style={styles.svgContainer}>
-              <Svg height="100%" width="100%" viewBox="0 0 7000 7500">
+            <View style={styles.svgContainer} pointerEvents="none">
+              <Svg
+                height="100%"
+                width="100%"
+                viewBox="0 0 7000 7500"
+                pointerEvents="none"
+              >
                 <Polyline
                   points={points}
                   stroke="red"
@@ -129,7 +149,7 @@ export default function CollectionScreen() {
               </Text>
             </>
           )}
-        </View>
+        </Pressable>
       </View>
     );
   }
