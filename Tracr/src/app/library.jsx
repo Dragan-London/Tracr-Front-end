@@ -74,7 +74,7 @@ export default function Shapes() {
         <View style={styles.modalBackground}>
           <View style={styles.modalBox}>
             <Image
-              source={{ uri: selectedShape?.image_url }}
+              source={imageMap[selectedShape?.name]}
               style={styles.modalImage}
             />
 
