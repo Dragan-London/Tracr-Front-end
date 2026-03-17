@@ -2,12 +2,18 @@ import { StyleSheet, View, Pressable, Modal, ImageBackground, Animated, useAnima
 import { useNavigation } from "expo-router";
 import { ThemedText } from "@/src/components/themed-text";
 import { useEffect, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import Svg, { Polyline } from "react-native-svg";
 
 export default function ResultsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const [points, setPoints] = useState(0);
   const navigation = useNavigation();
+
+  const { shape, runCoords } = useLocalSearchParams();
+  const selectedShape = JSON.parse(shape);
+  const AnimatedSvg = Animated.createAnimatedComponent(Svg)
 
   const handleSave = () => {
     navigation.navigate("stats")
@@ -112,16 +118,28 @@ export default function ResultsScreen() {
       />
 
       <View style={styles.imagesContainer}>
-        <Animated.Image
+        {/* <Animated.Image
           source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
           style={[
             styles.userRoute,
-            { transform: [{ translateX: slideRightAnim }] },]} />
+            { transform: [{ translateX: slideRightAnim }] },]} /> */}
 
-        <Animated.Image source={require("@/assets/images/red-outline-heart2.jpg")}
+        {/* <Animated.Image source={require("@/assets/images/red-outline-heart2.jpg")}
           style={[
             styles.targetRoute,
-            { transform: [{ translateX: slideLeftAnim }] },]} />
+            { transform: [{ translateX: slideLeftAnim }] },]} /> */}
+        <AnimatedSvg width={300} height={300} style={[
+            styles.targetRoute,
+            { transform: [{ translateX: slideLeftAnim }] },]}>
+          <Polyline
+            points={selectedShape.path
+              .map(p => `${p.x * 300},${p.y * 300}`)
+              .join(" ")}
+            fill="none"
+            stroke="red"
+            strokeWidth="4"
+          />
+        </AnimatedSvg>
       </View>
 
       <View style={styles.scoresContainer}>
@@ -129,32 +147,32 @@ export default function ResultsScreen() {
         <ThemedText style={styles.pointsText}>{points} POINTS</ThemedText>
       </View>
 
-<View style={styles.actionButtonsContainer}>
-      <Animated.View style={{ opacity: saveAnim }}>
-        <Pressable
-          onPress={() => handleSave()}
-          style={({ pressed }) => [
-            styles.button,
-            pressed && styles.buttonPressed,
-            styles.saveButton
-          ]}>
-          <ThemedText>Save</ThemedText>
-        </Pressable>
-      </Animated.View>
+      <View style={styles.actionButtonsContainer}>
+        <Animated.View style={{ opacity: saveAnim }}>
+          <Pressable
+            onPress={() => handleSave()}
+            style={({ pressed }) => [
+              styles.button,
+              pressed && styles.buttonPressed,
+              styles.saveButton
+            ]}>
+            <ThemedText>Save</ThemedText>
+          </Pressable>
+        </Animated.View>
 
 
-      <Animated.View style={{ opacity: retryAnim }}>
-        <Pressable
-          onPress={() => handleRetry()}
-          style={({ pressed }) => [
-            styles.button,
-            pressed && styles.buttonPressed,
-            styles.retryButton,
-          ]}>
-          <ThemedText>Retry</ThemedText>
-        </Pressable>
-      </Animated.View>
-</View>
+        <Animated.View style={{ opacity: retryAnim }}>
+          <Pressable
+            onPress={() => handleRetry()}
+            style={({ pressed }) => [
+              styles.button,
+              pressed && styles.buttonPressed,
+              styles.retryButton,
+            ]}>
+            <ThemedText>Retry</ThemedText>
+          </Pressable>
+        </Animated.View>
+      </View>
       <Animated.View style={{ opacity: shareAnim }}>
         <Pressable
           onPress={() => handleShare()}
