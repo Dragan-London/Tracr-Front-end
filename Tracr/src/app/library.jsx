@@ -64,10 +64,22 @@ export default function Shapes() {
       <FlatList
         data={shapes}
         numColumns={3}
+        scrollEnabled
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Pressable style={styles.card} onPress={() => handleSelection(item)}>
-            <Image source={imageMap[item.name]} style={styles.image} />
-          </Pressable>
+          <View style={styles.itemWrapper}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.card,
+                pressed && { transform: [{ scale: 0.95 }], opacity: 0.8 }
+              ]}
+              onPress={() => handleSelection(item)}
+            >
+              <Image source={imageMap[item.name]} style={styles.image} />
+            </Pressable>
+          </View>
         )}
       />
       <Modal visible={modalVisible} transparent={true}>
@@ -113,14 +125,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  listContent: {
+    paddingHorizontal: 6,
+    paddingTop: 40,
+    paddingBottom: 12,
+  },
+
+  itemWrapper: {
+    width: "33.33%",
+    paddingHorizontal: 6,
+    marginBottom: 12,
+  },
+
   card: {
-    flex: 1,
-    margin: 10,
-    height: 90,
-    borderRadius: 12,
-    backgroundColor: "white",
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.9)",
+
     justifyContent: "center",
     alignItems: "center",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
 
   icon: {
@@ -128,9 +158,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 60,
-    height: 60,
-    marginBottom: 5,
+    width: "70%",
+    height: "70%",
+    resizeMode: "contain",
   },
 
   modalBackground: {
