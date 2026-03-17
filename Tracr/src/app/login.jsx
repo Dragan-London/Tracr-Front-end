@@ -1,21 +1,53 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from "react-native";
 import { Text } from "@react-navigation/elements";
 import { router } from "expo-router";
-
-import { ThemedText } from "@/src/components/themed-text";
+import { useState } from "react";
+import {
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  useWindowDimensions,
+  View,
+} from "react-native";
 
 export default function MainScreen() {
-  const { width, height } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const imageSize = (height * 1.6) / 3;
 
-  function handlePress() {
-    console.log("pressed!");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function handleLoginSubmit() {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://tracr-c546.onrender.com/api/users/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+      console.log("Logged in:", data);
+      setModalVisible(false);
+      router.replace("/(tabs)");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -25,9 +57,54 @@ export default function MainScreen() {
         style={[styles.logo, { width: imageSize, height: imageSize }]}
         resizeMode="contain"
       />
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>Login</Text>
+
+            {error && <Text style={styles.errorText}>{error}</Text>}
+
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              textContentType="oneTimeCode"
+            />
+
+            <Pressable
+              style={styles.submitButton}
+              onPress={handleLoginSubmit}
+              disabled={isLoading}
+            >
+              <Text style={styles.buttonText}>
+                {isLoading ? "Logging in..." : "Submit"}
+              </Text>
+            </Pressable>
+
+            <Pressable onPress={() => setModalVisible(false)}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.buttonsContainer}>
         <Pressable
-          onPress={handlePress}
+          onPress={() => setModalVisible(true)}
           style={({ pressed }) => [
             styles.button,
             pressed && styles.buttonPressed,
@@ -99,5 +176,55 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: "ui-monospace",
+    fontWeight: "900",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBox: {
+    width: "85%",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#000",
+    padding: 24,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "900",
+    marginBottom: 20,
+  },
+  input: {
+    width: "100%",
+    borderWidth: 2,
+    borderColor: "#aaa",
+    borderRadius: 10,
+    padding: 14,
+    fontSize: 16,
+    marginBottom: 14,
+    backgroundColor: "#f9f9f9",
+  },
+  submitButton: {
+    width: "100%",
+    backgroundColor: "#5cbdfd",
+    borderWidth: 2,
+    borderColor: "#000",
+    borderRadius: 10,
+    padding: 14,
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 12,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+  },
+  cancelText: {
+    color: "#888",
+    textDecorationLine: "underline",
   },
 });
