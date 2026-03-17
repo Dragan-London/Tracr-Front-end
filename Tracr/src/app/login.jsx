@@ -1,6 +1,7 @@
 import { Text } from "@react-navigation/elements";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "@/src/contexts/UserContext";
 import {
   Image,
   Modal,
@@ -14,6 +15,7 @@ import {
 export default function MainScreen() {
   const { height } = useWindowDimensions();
   const imageSize = (height * 1.6) / 3;
+  const { setUser } = useContext(UserContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("");
@@ -41,6 +43,7 @@ export default function MainScreen() {
         throw new Error(data.message || "Login failed");
       }
       console.log("Logged in:", data);
+      setUser(data.user);
       setModalVisible(false);
       router.replace("/(tabs)");
     } catch (err) {
