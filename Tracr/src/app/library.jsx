@@ -38,6 +38,22 @@ export default function Shapes() {
   const bgImage3 =
     "https://img.freepik.com/premium-vector/children-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg";
 
+  const imageMap = {
+    triangle: require("@/data/images/triangle.png"),
+    cross: require("@/data/images/cross.png"),
+    zigzag: require("@/data/images/zigzag.png"),
+    hexagon: require("@/data/images/hexagon.png"),
+    arrow: require("@/data/images/arrow.png"),
+    steps: require("@/data/images/steps.png"),
+    spiral: require("@/data/images/spiral.png"),
+    star: require("@/data/images/star.png"),
+    gem: require("@/data/images/gem.png"),
+    heart: require("@/data/images/heart.png"),
+    lightning: require("@/data/images/lightning.png"),
+    butterfly: require("@/data/images/butterfly.png"),
+    bear: require("@/data/images/bear.png"),
+  };
+
   return (
     <ImageBackground
       source={{ uri: bgImage3 }}
@@ -50,7 +66,7 @@ export default function Shapes() {
         numColumns={3}
         renderItem={({ item }) => (
           <Pressable style={styles.card} onPress={() => handleSelection(item)}>
-            <Image source={{ uri: item.image_url }} style={styles.image} />
+            <Image source={imageMap[item.name]} style={styles.image} />
           </Pressable>
         )}
       />
@@ -112,8 +128,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
     marginBottom: 5,
   },
 
