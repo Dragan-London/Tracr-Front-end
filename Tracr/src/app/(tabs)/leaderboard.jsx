@@ -1,36 +1,106 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
 
-const allTimeScores = [
-  { id: "1", name: "Tyler Durden", score: 9850 },
-  { id: "2", name: "Jane Smith", score: 8720 },
-  { id: "3", name: "Alex Johnson", score: 8100 },
-  { id: "4", name: "Sam Lee", score: 7650 },
-  { id: "5", name: "Chris Evans", score: 7200 },
-  { id: "6", name: "Morgan Liu", score: 6980 },
-  { id: "7", name: "Jamie Fox", score: 6400 },
-  { id: "8", name: "Taylor Knox", score: 5900 },
-  { id: "9", name: "Jordan Riley", score: 5500 },
-  { id: "10", name: "Casey Morgan", score: 5100 },
-];
+function getLeaderboardUrl(activeTab) {
+  if (activeTab === "daily") {
+    return "https://tracr-c546.onrender.com/api/leaderboards?sort_by=accuracy&order=desc&time=day";
+  }
 
-const dailyScores = [
-  { id: "1", name: "Morgan Liu", score: 1200 },
-  { id: "2", name: "Tyler Durden", score: 1100 },
-  { id: "3", name: "Casey Morgan", score: 980 },
-  { id: "4", name: "Jamie Fox", score: 870 },
-  { id: "5", name: "Sam Lee", score: 800 },
-  { id: "6", name: "Jordan Riley", score: 750 },
-  { id: "7", name: "Alex Johnson", score: 690 },
-  { id: "8", name: "Jane Smith", score: 620 },
-  { id: "9", name: "Chris Evans", score: 540 },
-  { id: "10", name: "Taylor Knox", score: 480 },
-];
+  return "https://tracr-c546.onrender.com/api/leaderboards";
+}
+
+function getUniqueBestScores(rows) {
+  const bestByUser = {};
+
+  for (let i = 0; i < rows.length; i += 1) {
+    const row = rows[i];
+
+    if (!row || !row.userId) {
+      continue;
+    }
+
+    const userId = String(row.userId);
+
+    if (bestByUser[userId] === undefined) {
+      bestByUser[userId] = row;
+    } else {
+      const oldScore = Number(bestByUser[userId].accuracy) || 0;
+      const newScore = Number(row.accuracy) || 0;
+
+      if (newScore > oldScore) {
+        bestByUser[userId] = row;
+      }
+    }
+  }
+
+  const result = Object.values(bestByUser);
+
+  result.sort(function (a, b) {
+    const scoreA = Number(a.accuracy) || 0;
+    const scoreB = Number(b.accuracy) || 0;
+    return scoreB - scoreA;
+  });
+
+  return result;
+}
 
 export default function LeaderboardScreen() {
   const [activeTab, setActiveTab] = useState("allTime");
+  const [scores, setScores] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const scores = activeTab === "allTime" ? allTimeScores : dailyScores;
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(getLeaderboardUrl(activeTab));
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to load leaderboard");
+        }
+
+        if (data && Array.isArray(data.leaderboard)) {
+          setScores(getUniqueBestScores(data.leaderboard));
+        } else {
+          setScores([]);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchLeaderboard();
+  }, [activeTab]);
+
+  function getPlayerName(player) {
+    if (player && player.username) {
+      return player.username;
+    }
+
+    if (player && player.name) {
+      return player.name;
+    }
+
+    if (player && player.userId) {
+      return `User ${player.userId}`;
+    }
+
+    return "Unknown user";
+  }
+
+  function getPlayerScore(player) {
+    if (player && player.accuracy !== undefined && player.accuracy !== null) {
+      return `${player.accuracy}%`;
+    }
+
+    return "-";
+  }
 
   return (
     <View style={styles.container}>
@@ -64,6 +134,16 @@ export default function LeaderboardScreen() {
       </View>
 
       <ScrollView>
+        {isLoading ? (
+          <Text style={styles.message}>Loading leaderboard...</Text>
+        ) : null}
+
+        {error ? <Text style={styles.message}>{error}</Text> : null}
+
+        {!isLoading && !error && scores.length === 0 ? (
+          <Text style={styles.message}>No leaderboard data found.</Text>
+        ) : null}
+
         {scores.map((player, index) => {
           const rank = index + 1;
           let medal = String(rank);
@@ -73,12 +153,12 @@ export default function LeaderboardScreen() {
 
           return (
             <View
-              key={player.id}
+              key={String(index)}
               style={rank <= 3 ? styles.rowGold : styles.row}
             >
               <Text style={styles.rank}>{medal}</Text>
-              <Text style={styles.name}>{player.name}</Text>
-              <Text style={styles.score}>{player.score}</Text>
+              <Text style={styles.name}>{getPlayerName(player)}</Text>
+              <Text style={styles.score}>{getPlayerScore(player)}</Text>
             </View>
           );
         })}
@@ -163,6 +243,13 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#333",
+  },
+  message: {
+    textAlign: "center",
+    fontSize: 16,
+    marginTop: 20,
+    marginBottom: 20,
     color: "#333",
   },
 });
