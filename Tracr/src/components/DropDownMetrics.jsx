@@ -6,9 +6,9 @@ export default function DropDownMetrics({ setMetric }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: "Score", value: "score" },
+    { label: "Accuracy", value: "accuracy" },
     { label: "Distance", value: "distance" },
-    { label: "Time", value: "time" },
+    { label: "Duration", value: "duration" },
   ]);
 
   return (
@@ -20,7 +20,7 @@ export default function DropDownMetrics({ setMetric }) {
         setOpen={setOpen}
         setValue={setValue}
         setItems={setItems}
-        placeholder="Score"
+        placeholder="Accuracy"
         listMode="SCROLLVIEW"
         style={styles.dropdown}
         onChangeValue={(value) => setMetric(value)}
