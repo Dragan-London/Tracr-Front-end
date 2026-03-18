@@ -193,6 +193,7 @@ export default function CollectionScreen() {
         }}
         renderItem={renderCard}
         contentContainerStyle={styles.listContent}
+        ListHeaderComponent={<Text style={styles.pageHeading}>Your Runs</Text>}
         ListEmptyComponent={
           <View style={styles.centeredMessageContainer}>
             <Text style={styles.centeredMessageText}>
@@ -259,5 +260,15 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     textAlign: "center",
+  },
+  pageHeading: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#10b981",
+    textAlign: "center",
+    paddingHorizontal: 12,
+    marginBottom: 16,
+    marginTop: 8,
+    letterSpacing: 0.5,
   },
 });
