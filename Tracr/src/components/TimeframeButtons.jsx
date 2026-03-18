@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     alignSelf: "center",
-    // borderColor: "red",
-    // borderWidth: 1,
+    marginBottom: 20,
   },
   button: {
     paddingVertical: 10,
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     color: "black",
-    backgroundColor: "white",
+    backgroundColor: "#dceefb",
   },
   buttonPressed: {
     transform: [{ translateX: 1 }, { translateY: 1 }],
