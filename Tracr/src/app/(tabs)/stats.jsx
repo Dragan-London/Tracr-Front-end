@@ -32,30 +32,26 @@ export default function StatsScreen() {
           `https://tracr-c546.onrender.com/api/users/${user_id}/expeditions?time=${timeframe}`,
         );
         const { expeditions } = data;
+        const parsedExpeditions = parseExpeditions(expeditions, timeframe);
+        const monthlyAverages = getMonthlyAverages(expeditions);
 
         if (timeframe === "year") {
-          setData(getMonthlyAverages(expeditions));
+          const dataPoints = monthlyAverages.map((month) => {
+            return month[metric];
+          });
+          setData(dataPoints);
+        } else {
+          const dataPoints = parsedExpeditions.map((trace) => {
+            return trace[metric];
+          });
+          setData(dataPoints);
         }
 
-        const parsedExpeditions = parseExpeditions(expeditions, timeframe);
-
-        const dataPoints = parsedExpeditions.map((trace) => {
-          // if (metric === "duration") {
-          //   console.log(
-          //     "this is duration in mins",
-          //     durationToMinutes(trace[metric]),
-          //   );
-          //   return durationToMinutes(trace[metric]);
-          // }
-          return trace[metric];
-        });
-        setData(dataPoints);
-
         setScore(getAverageScore(expeditions, metric));
-        setTotalShapes(parsedExpeditions.length);
+        setTotalShapes(parsedExpeditions.length); //CURRENTLY SETTING TO LENGTH OF PERIOD, NOT SHAPES COMPLETED
         setDateRange(
           `${new Date(parsedExpeditions[0].timestamp).toLocaleDateString()} - ${new Date(parsedExpeditions[parsedExpeditions.length - 1].timestamp).toLocaleDateString()}`,
-        );
+        ); //ALSO WRONG !! CURRENTLY YEAR DIFFERENCE IS SET TO 12 DAYS BEFORE
         if (parsedExpeditions) setLoading(false);
       } catch (err) {
         console.log(err);
