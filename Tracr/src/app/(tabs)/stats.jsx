@@ -1,51 +1,83 @@
 import AverageView from "@/src/components/AverageView";
 import DropDownMetrics from "@/src/components/DropDownMetrics";
+import LoadingPage from "@/src/components/LoadingPage";
 import StatsChart from "@/src/components/StatsChart";
 import TimeframeButtons from "@/src/components/TimeframeButtons";
+import getAverageScore from "@/src/utils/getAverageScore";
+import getMonthlyAverages from "@/src/utils/getMonthlyAverages";
+import parseExpeditions from "@/src/utils/parseExpeditions";
 import { Text } from "@react-navigation/elements";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function StatsScreen() {
   const [timeframe, setTimeframe] = useState("week");
-  const [metric, setMetric] = useState("score");
+  const [metric, setMetric] = useState("accuracy");
   const [score, setScore] = useState(null);
-  const [distance, setDistance] = useState(null);
-  const [minutes, setMinutes] = useState(null);
   const [totalShapes, setTotalShapes] = useState(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [dateRange, setDateRange] = useState(null);
 
   const backgroundImg =
     "https://slack-imgs.com/?c=1&o1=ro&url=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fchildren-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg";
 
-  //what do we want to see: average score, distance, time. Query with time (7 days, month )
   useEffect(() => {
     async function getExpeditions() {
       try {
         const user_id = 1;
         const { data } = await axios(
-          `https://tracr-c546.onrender.com/api/users/${user_id}/expeditions`, //
+          `https://tracr-c546.onrender.com/api/users/${user_id}/expeditions?time=${timeframe}`,
         );
         const { expeditions } = data;
-        setScore(expeditions[0].accuracy);
-        setDistance(expeditions[0].distance);
-        setMinutes(expeditions[0].duration.minutes);
-        setTotalShapes(expeditions.length);
+
+        if (timeframe === "year") {
+          setData(getMonthlyAverages(expeditions));
+        }
+
+        const parsedExpeditions = parseExpeditions(expeditions, timeframe);
+
+        const dataPoints = parsedExpeditions.map((trace) => {
+          // if (metric === "duration") {
+          //   console.log(
+          //     "this is duration in mins",
+          //     durationToMinutes(trace[metric]),
+          //   );
+          //   return durationToMinutes(trace[metric]);
+          // }
+          return trace[metric];
+        });
+        setData(dataPoints);
+
+        setScore(getAverageScore(expeditions, metric));
+        setTotalShapes(parsedExpeditions.length);
+        setDateRange(
+          `${new Date(parsedExpeditions[0].timestamp).toLocaleDateString()} - ${new Date(parsedExpeditions[parsedExpeditions.length - 1].timestamp).toLocaleDateString()}`,
+        );
+        if (parsedExpeditions) setLoading(false);
       } catch (err) {
         console.log(err);
       }
     }
     getExpeditions();
-  }, []);
+  }, [metric, timeframe]);
+
+  if (loading) return <LoadingPage />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ImageBackground
         src={backgroundImg}
         resizeMode="cover"
         style={styles.backgroundImage}
       />
-      <View>
+      <View style={styles.streak}>
+        <Image
+          source={require("@/assets/images/fire.png")}
+          style={styles.fireImage}
+        />
         <Text style={styles.streakText}>3</Text>
       </View>
       <View>
@@ -56,14 +88,17 @@ export default function StatsScreen() {
         <AverageView
           metric={metric}
           score={score}
-          distance={distance}
-          minutes={minutes}
           totalShapes={totalShapes}
           timeframe={timeframe}
         />
       </View>
-      <StatsChart />
-    </View>
+      <StatsChart
+        data={data}
+        dateRange={dateRange}
+        timeframe={timeframe}
+        metric={metric}
+      />
+    </SafeAreaView>
   );
 }
 
@@ -72,18 +107,33 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "90%",
     flexShrink: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
     alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "red",
   },
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
     opacity: 0.1,
   },
+  fireImage: {
+    position: "absolute",
+    width: 120,
+    height: 120,
+    alignSelf: "center",
+  },
+  streak: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 0,
+    margin: 0,
+  },
   streakText: {
     fontFamily: "ui-monospace",
-    fontSize: "60",
+    fontSize: "50",
+    textAlign: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    color: "black",
+    paddingTop: 15,
   },
 });
