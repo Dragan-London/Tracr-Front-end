@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f4ff",
-    paddingTop: 60,
+    paddingTop: 44,
     paddingHorizontal: 16,
   },
   backgroundImage: {
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   drawingContainer: {
-    flex: 1,
+    flex: 0.75,
     backgroundColor: "white",
     borderRadius: 12,
     marginBottom: 20,
