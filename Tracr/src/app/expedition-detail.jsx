@@ -7,6 +7,7 @@ import {
   ImageBackground,
 } from "react-native";
 import Svg, { Polyline } from "react-native-svg";
+import { shapes } from "@/data/shapes";
 
 function getPolylinePoints(svgText) {
   if (typeof svgText !== "string") {
@@ -29,9 +30,15 @@ function getPolylinePoints(svgText) {
 
 export default function ExpeditionDetailScreen() {
   const navigation = useNavigation();
-  const { svg, title, distance, accuracy } = useLocalSearchParams();
+  const { svg, title, distance, accuracy, shapeId } = useLocalSearchParams();
 
   const points = getPolylinePoints(svg);
+
+  let targetShape = null;
+  if (shapeId) {
+    const id = parseInt(shapeId, 10);
+    targetShape = shapes.find((shape) => shape.id === id);
+  }
 
   function handleBack() {
     navigation.goBack();
@@ -53,7 +60,20 @@ export default function ExpeditionDetailScreen() {
 
       <View style={styles.drawingContainer}>
         {points ? (
-          <Svg height="100%" width="100%" viewBox="0 0 7000 7500">
+          <Svg height="100%" width="100%" viewBox="0 0 10000 10000">
+            {targetShape && (
+              <Polyline
+                points={targetShape.path
+                  .map((p) => `${p.x * 10000},${p.y * 10000}`)
+                  .join(" ")}
+                stroke="blue"
+                strokeWidth="400"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+                opacity="0.4"
+              />
+            )}
             <Polyline
               points={points}
               stroke="red"
@@ -61,7 +81,7 @@ export default function ExpeditionDetailScreen() {
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
-              opacity="0.7"
+              opacity="0.9"
             />
           </Svg>
         ) : (

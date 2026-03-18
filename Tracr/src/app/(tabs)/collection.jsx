@@ -62,6 +62,7 @@ export default function CollectionScreen() {
         title: expedition.title || "Expedition",
         distance: String(expedition.distance || 0),
         accuracy: String(expedition.accuracy || 0),
+        shapeId: String(expedition.shapeId || 0),
       },
     });
   }
