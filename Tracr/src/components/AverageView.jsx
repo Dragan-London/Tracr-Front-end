@@ -2,31 +2,19 @@ import { Text } from "@react-navigation/elements";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-export default function AverageView({
-  metric,
-  score,
-  distance,
-  minutes,
-  totalShapes,
-  timeframe,
-}) {
+export default function AverageView({ metric, score, totalShapes, timeframe }) {
   const [icon, setIcon] = useState(require("@/assets/images/scoreIcon.png"));
-  const [metricScore, setMetricScore] = useState(`${score}%`);
-  //average metric score + comparison
 
   useEffect(() => {
     switch (metric) {
       case "score":
         setIcon(require("@/assets/images/scoreIcon.png"));
-        setMetricScore(`${score}%`);
         break;
       case "distance":
         setIcon(require("@/assets/images/distance.png"));
-        setMetricScore(`${distance}m`);
         break;
       case "time":
         setIcon(require("@/assets/images/stopwatch.png"));
-        setMetricScore(`${minutes} mins`);
     }
   }, [metric]);
 
@@ -36,36 +24,56 @@ export default function AverageView({
         <View style={styles.iconAndScore}>
           <Image source={icon} style={styles.icon} />
           <View style={styles.scoreContainer}>
-            <Text style={styles.averageScore}>{metricScore}</Text>
-            <Text style={styles.metric}>{metric}</Text>
+            <Text style={[styles.averageScore, styles.text]}>{score}</Text>
+            <Text style={[styles.metric, styles.text]}>{metric}</Text>
           </View>
         </View>
         <View style={styles.comparison}>
-          <Text>^26%</Text>
-          {timeframe === "all time" ? (
-            <Text>All time</Text>
+          {score > 0 ? (
+            <Text style={[styles.scorePercent, styles.increasedScore]}>
+              ↑{score}%
+            </Text>
           ) : (
-            <Text>This {timeframe}</Text>
+            <Text style={[styles.scorePercent, styles.decreasedScore]}>
+              ↓{score}%
+            </Text>
+          )}
+          {timeframe === "all time" ? (
+            <Text style={styles.timeFrameText}>all time</Text>
+          ) : (
+            <Text style={styles.timeFrameText}>{timeframe}</Text>
           )}
         </View>
       </View>
       <View style={styles.scoreCard}>
         <View style={styles.iconAndScore}>
-          <Image
-            source={require("@/assets/images/red-outline-heart2.jpg")}
-            style={styles.icon}
-          />
-          <View style={styles.scoreContainer}>
-            <Text style={styles.averageScore}>{totalShapes}</Text>
-            <Text style={styles.metric}>Shapes completed</Text>
+          <View>
+            <Image
+              source={require("@/assets/images/cropped-red-heart.jpg")}
+              style={styles.icon}
+            />
+          </View>
+          <View style={[styles.scoreContainer, styles.text]}>
+            <Text style={[styles.averageScore, styles.text]}>
+              {totalShapes}
+            </Text>
+            <Text style={[styles.metric, styles.text]}>Total shapes</Text>
           </View>
         </View>
         <View style={styles.comparison}>
-          <Text>^26%</Text>
-          {timeframe === "all time" ? (
-            <Text>All time</Text>
+          {score > 0 ? (
+            <Text style={[styles.scorePercent, styles.increasedScore]}>
+              ↑{score}%
+            </Text>
           ) : (
-            <Text>This {timeframe}</Text>
+            <Text style={[styles.scorePercent, styles.decreasedScore]}>
+              ↓{score}%
+            </Text>
+          )}
+          {timeframe === "all time" ? (
+            <Text style={styles.timeFrameText}>all time</Text>
+          ) : (
+            <Text style={styles.timeFrameText}>{timeframe}</Text>
           )}
         </View>
       </View>
@@ -75,14 +83,13 @@ export default function AverageView({
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 20,
   },
   scoreCard: {
     flexDirection: "column",
-    width: 160,
-    height: 125,
+    width: 170,
     alignSelf: "center",
     borderWidth: 3,
     borderColor: "black",
@@ -93,21 +100,16 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     elevation: 2,
     backgroundColor: "white",
-    // marginTop: 20,
-    // marginBottom: 20,
-    // paddingLeft: 10,
-    // paddingRight: 10,
-    // paddingTop: 10,
-    // paddingBottom: 10,
+    padding: 15,
   },
   icon: {
     resizeMethod: "contain",
-    width: 47,
-    height: 47,
+    width: 40,
+    height: 40,
     marginBottom: 10,
+    marginRight: 10,
   },
   scoreContainer: {
-    flex: 1,
     flexDirection: "column",
   },
   averageScore: {
@@ -123,14 +125,35 @@ const styles = StyleSheet.create({
   iconAndScore: {
     borderBottomColor: "#bdbdbd",
     borderBottomWidth: 1,
-    flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "stretch",
-    margin: 10,
+    paddingBottom: 7,
   },
   comparison: {
-    flex: 1,
     flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 10,
+    alignItems: "center",
+  },
+  scorePercent: {
+    backgroundColor: "#abffb3",
+    borderRadius: 5,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 2,
+    paddingBottom: 2,
+    fontFamily: "ui-monospace",
+    textAlign: "right",
+  },
+  increasedScore: {
+    backgroundColor: "#abffb3",
+  },
+  decreasedScore: {
+    backgroundColor: "#ffa0a0",
+  },
+  timeFrameText: {
+    fontFamily: "ui-monospace",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });
