@@ -33,9 +33,9 @@ export default function StatsScreen() {
         );
         const { expeditions } = data;
         const parsedExpeditions = parseExpeditions(expeditions, timeframe);
-        const monthlyAverages = getMonthlyAverages(expeditions);
 
         if (timeframe === "year") {
+          const monthlyAverages = getMonthlyAverages(expeditions);
           const dataPoints = monthlyAverages.map((month) => {
             return month[metric];
           });
@@ -48,7 +48,7 @@ export default function StatsScreen() {
         }
 
         setScore(getAverageScore(expeditions, metric));
-        setTotalShapes(parsedExpeditions.length); //CURRENTLY SETTING TO LENGTH OF PERIOD, NOT SHAPES COMPLETED
+        setTotalShapes(expeditions.length);
         setDateRange(
           `${new Date(parsedExpeditions[0].timestamp).toLocaleDateString()} - ${new Date(parsedExpeditions[parsedExpeditions.length - 1].timestamp).toLocaleDateString()}`,
         ); //ALSO WRONG !! CURRENTLY YEAR DIFFERENCE IS SET TO 12 DAYS BEFORE
