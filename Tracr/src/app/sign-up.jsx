@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.1,
+    opacity: 0.25,
   },
   title: {
     fontSize: 28,
