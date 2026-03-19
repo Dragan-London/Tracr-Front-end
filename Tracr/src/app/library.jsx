@@ -8,73 +8,28 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
-import { useNavigation } from "expo-router";
+import { router } from "expo-router"
 import { useState } from "react";
+import { shapes } from "../../data/shapes";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Shapes() {
   const [selectedShape, setSelectedShape] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation();
-
-  const shapes = [
-    {
-      id: 1,
-      name: "Star",
-      image_url:
-        "https://images.emojiterra.com/google/android-10/512px/2b50.png",
-    },
-    {
-      id: 2,
-      name: "Heart",
-      image_url:
-        "https://images.emojiterra.com/google/android-10/512px/2764.png",
-    },
-    {
-      id: 3,
-      name: "Fire",
-      image_url:
-        "https://images.emojiterra.com/google/android-11/512px/1f525.png",
-    },
-    {
-      id: 4,
-      name: "Flag",
-      image_url:
-        "https://images.emojiterra.com/google/noto-emoji/unicode-15/color/512px/1f6a9.png",
-    },
-    {
-      id: 5,
-      name: "Shoe",
-      image_url:
-        "https://images.emojiterra.com/google/android-12l/512px/1f45f.png",
-    },
-    {
-      id: 6,
-      name: "Dog",
-      image_url:
-        "https://images.emojiterra.com/google/android-11/512px/1f436.png",
-    },
-    {
-      id: 7,
-      name: "Turtle",
-      image_url:
-        "https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/1024px/1f422.png",
-    },
-    {
-      id: 8,
-      name: "Merperson",
-      image_url:
-        "https://images.emojiterra.com/microsoft/fluent-emoji/15.1/3d/1f9dc_3d.png",
-    },
-  ];
 
   const handleSelection = (shape) => {
     setSelectedShape(shape);
     setModalVisible(true);
   };
 
-  const handleConfirm = (shape) => {
+  const handleConfirm = () => {
     setModalVisible(false);
-    navigation.navigate("map");
+    router.push({
+      pathname: "/map",
+      params: {
+        shape: JSON.stringify(selectedShape),
+      },
+    });
   };
 
   const bgImage1 =
@@ -84,7 +39,27 @@ export default function Shapes() {
   const bgImage3 =
     "https://img.freepik.com/premium-vector/children-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg";
 
+  const imageMap = {
+    triangle: require("@/data/images/triangle.png"),
+    cross: require("@/data/images/cross.png"),
+    zigzag: require("@/data/images/zigzag.png"),
+    hexagon: require("@/data/images/hexagon.png"),
+    arrow: require("@/data/images/arrow.png"),
+    steps: require("@/data/images/steps.png"),
+    spiral: require("@/data/images/spiral.png"),
+    star: require("@/data/images/star.png"),
+    gem: require("@/data/images/gem.png"),
+    heart: require("@/data/images/heart.png"),
+    lightning: require("@/data/images/lightning.png"),
+    butterfly: require("@/data/images/butterfly.png"),
+    bear: require("@/data/images/bear.png"),
+    airplane: require("@/data/images/airplane.png"),
+    house: require("@/data/images/house.png"),
+    sailboat: require("@/data/images/sailboat.png"),
+  };
+
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <ImageBackground
       source={{ uri: bgImage3 }}
       resizeMode="cover"
@@ -94,24 +69,36 @@ export default function Shapes() {
       <FlatList
         data={shapes}
         numColumns={3}
+        scrollEnabled
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Pressable style={styles.card} onPress={() => handleSelection(item)}>
-            <Image source={{ uri: item.image_url }} style={styles.image} />
-          </Pressable>
+          <View style={styles.itemWrapper}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.card,
+                pressed && { transform: [{ scale: 0.95 }], opacity: 0.8 }
+              ]}
+              onPress={() => handleSelection(item)}
+            >
+              <Image source={imageMap[item.name]} style={styles.image} />
+            </Pressable>
+          </View>
         )}
       />
       <Modal visible={modalVisible} transparent={true}>
         <View style={styles.modalBackground}>
           <View style={styles.modalBox}>
             <Image
-              source={{ uri: selectedShape?.image_url }}
+              source={imageMap[selectedShape?.name]}
               style={styles.modalImage}
             />
 
             <Text style={styles.modalText}>Start this run?</Text>
 
             <Pressable
-              onPress={() => handleConfirm(selectedShape)}
+              onPress={() => handleConfirm()}
               style={({ pressed }) => [
                 styles.button,
                 pressed && styles.buttonPressed,
@@ -135,6 +122,7 @@ export default function Shapes() {
         </View>
       </Modal>
     </ImageBackground>
+    </SafeAreaView>
   );
 }
 
@@ -143,14 +131,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  listContent: {
+    paddingHorizontal: 6,
+    paddingTop: 60,
+    paddingBottom: 12,
+  },
+
+  itemWrapper: {
+    width: "33.33%",
+    paddingHorizontal: 6,
+    marginBottom: 12,
+  },
+
   card: {
-    flex: 1,
-    margin: 10,
-    height: 90,
-    borderRadius: 12,
-    backgroundColor: "white",
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.9)",
+
     justifyContent: "center",
     alignItems: "center",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
 
   icon: {
@@ -158,9 +164,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 40,
-    height: 40,
-    marginBottom: 5,
+    width: "70%",
+    height: "70%",
+    resizeMode: "contain",
   },
 
   modalBackground: {

@@ -1,9 +1,13 @@
 import { Text } from "@react-navigation/elements";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "@/src/contexts/UserContext";
 import {
   Image,
+  ImageBackground,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
@@ -11,9 +15,14 @@ import {
   View,
 } from "react-native";
 
+const backgroundImg =
+  "https://slack-imgs.com/?c=1&o1=ro&url=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fchildren-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg";
+
 export default function MainScreen() {
   const { height } = useWindowDimensions();
   const imageSize = (height * 1.6) / 3;
+  const { setUser } = useContext(UserContext);
+  const placeholderColor = "#666";
 
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("");
@@ -41,6 +50,7 @@ export default function MainScreen() {
         throw new Error(data.message || "Login failed");
       }
       console.log("Logged in:", data);
+      setUser(data.user);
       setModalVisible(false);
       router.replace("/(tabs)");
     } catch (err) {
@@ -52,8 +62,13 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={{ uri: backgroundImg }}
+        resizeMode="cover"
+        style={styles.backgroundImage}
+      />
       <Image
-        source={require("@/assets/images/Tracer_img_no.6.png")}
+        source={require("@/assets/images/Tracr-logo.png")}
         style={[styles.logo, { width: imageSize, height: imageSize }]}
         resizeMode="contain"
       />
@@ -63,7 +78,11 @@ export default function MainScreen() {
         animationType="fade"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
+        >
           <View style={styles.modalBox}>
             <Text style={styles.modalTitle}>Login</Text>
 
@@ -72,6 +91,7 @@ export default function MainScreen() {
             <TextInput
               style={styles.input}
               placeholder="Username"
+              placeholderTextColor={placeholderColor}
               value={username}
               onChangeText={setUsername}
               autoCapitalize="none"
@@ -79,6 +99,7 @@ export default function MainScreen() {
             <TextInput
               style={styles.input}
               placeholder="Password"
+              placeholderTextColor={placeholderColor}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -99,7 +120,7 @@ export default function MainScreen() {
               <Text style={styles.cancelText}>Cancel</Text>
             </Pressable>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <View style={styles.buttonsContainer}>
@@ -133,11 +154,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 0,
+    paddingTop: 86,
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.2,
   },
   logo: {
     marginBottom: 40,
-    mixBlendMode: "multiply",
+    opacity: 1,
   },
   buttonsContainer: {
     width: "60%",
@@ -207,6 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 14,
     backgroundColor: "#f9f9f9",
+    color: "#111",
   },
   submitButton: {
     width: "100%",
