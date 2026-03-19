@@ -4,6 +4,7 @@ import LoadingPage from "@/src/components/LoadingPage";
 import StatsChart from "@/src/components/StatsChart";
 import TimeframeButtons from "@/src/components/TimeframeButtons";
 import getAverageScore from "@/src/utils/getAverageScore";
+import getDateRange from "@/src/utils/getDateRange";
 import getMonthlyAverages from "@/src/utils/getMonthlyAverages";
 import parseExpeditions from "@/src/utils/parseExpeditions";
 import { Text } from "@react-navigation/elements";
@@ -33,9 +34,8 @@ export default function StatsScreen() {
         );
         const { expeditions } = data;
         const parsedExpeditions = parseExpeditions(expeditions, timeframe);
-
         if (timeframe === "year") {
-          const monthlyAverages = getMonthlyAverages(expeditions);
+          const monthlyAverages = getMonthlyAverages(parsedExpeditions);
           const dataPoints = monthlyAverages.map((month) => {
             return month[metric];
           });
@@ -47,12 +47,10 @@ export default function StatsScreen() {
           setData(dataPoints);
         }
 
-        setScore(getAverageScore(expeditions, metric));
+        setScore(getAverageScore(parsedExpeditions, metric));
         setTotalShapes(expeditions.length);
-        setDateRange(
-          `${new Date(parsedExpeditions[0].timestamp).toLocaleDateString()} - ${new Date(parsedExpeditions[parsedExpeditions.length - 1].timestamp).toLocaleDateString()}`,
-        ); //ALSO WRONG !! CURRENTLY YEAR DIFFERENCE IS SET TO 12 DAYS BEFORE
-        if (parsedExpeditions) setLoading(false);
+        if (expeditions) setLoading(false);
+        setDateRange(getDateRange(timeframe));
       } catch (err) {
         console.log(err);
       }
