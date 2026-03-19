@@ -8,11 +8,11 @@ const pages = [
   { label: "Sign Up", route: "/sign-up" },
   { label: "Login", route: "../login" },
   { label: "Map", route: "/map" },
-  { label: "Post Drawing", route: "/post-drawing" },
+  { label: "Results", route: "/results" },
   { label: "Stats", route: "/stats" },
   { label: "Collection", route: "/collection" },
   { label: "Leaderboard", route: "/leaderboard" },
-  { label: "Gallery", route: "/gallery" },
+  { label: "Library", route: "/library" },
 ];
 
 export default function TabTwoScreen() {

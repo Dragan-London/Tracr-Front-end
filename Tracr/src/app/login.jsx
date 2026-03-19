@@ -1,19 +1,21 @@
-import { useState } from "react";
+import { Text } from "@react-navigation/elements";
+import { router } from "expo-router";
+import { useContext, useState } from "react";
+import { UserContext } from "@/src/contexts/UserContext";
 import {
   Image,
   Modal,
   Pressable,
   StyleSheet,
-  View,
   TextInput,
   useWindowDimensions,
+  View,
 } from "react-native";
-import { Text } from "@react-navigation/elements";
-import { router } from "expo-router";
 
 export default function MainScreen() {
   const { height } = useWindowDimensions();
   const imageSize = (height * 1.6) / 3;
+  const { setUser } = useContext(UserContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("");
@@ -41,8 +43,9 @@ export default function MainScreen() {
         throw new Error(data.message || "Login failed");
       }
       console.log("Logged in:", data);
+      setUser(data.user);
       setModalVisible(false);
-      router.push("/main");
+      router.replace("/(tabs)");
     } catch (err) {
       setError(err.message);
     } finally {

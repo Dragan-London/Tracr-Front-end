@@ -1,13 +1,16 @@
-import React from "react";
-import { Image } from "expo-image";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ImageBackground, StyleSheet } from "react-native";
-import { Pressable } from "react-native";
 import { Text } from "@react-navigation/elements";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { ImageBackground, Pressable, StyleSheet } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
-  function handlePress() {
-    console.log("pressed!");
+  function handleStartPress() {
+    router.push("/map");
+  }
+
+  function handleLibraryPress() {
+    router.push("/library");
   }
 
   const backgroundImg =
@@ -29,7 +32,7 @@ export default function HomeScreen() {
       </SafeAreaView>
       <SafeAreaView>
         <Pressable
-          onPress={handlePress}
+          onPress={handleLibraryPress}
           style={({ pressed }) => [
             styles.button,
             pressed && styles.buttonPressed,
@@ -39,7 +42,7 @@ export default function HomeScreen() {
           <Text style={styles.buttonText}>Library of Shapes</Text>
         </Pressable>
         <Pressable
-          onPress={handlePress}
+          onPress={handleStartPress}
           style={({ pressed }) => [
             styles.button,
             pressed && styles.buttonPressed,

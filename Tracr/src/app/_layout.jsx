@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/src/hooks/use-color-scheme";
+import { UserProvider } from "@/src/contexts/UserContext";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -17,20 +18,22 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: "modal", title: "Modal" }}
-        />
-        <Stack.Screen name="login" options={{ title: "Login" }} />
-        <Stack.Screen name="sign-up" options={{ title: "Sign Up" }} />
-        <Stack.Screen name="map" options={{ title: "Map" }} />
-        <Stack.Screen name="post-drawing" options={{ title: "Post Drawing" }} />
-        <Stack.Screen name="gallery" options={{ title: "Gallery" }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: "modal", title: "Modal" }}
+          />
+          <Stack.Screen name="login" options={{ title: "Login" }} />
+          <Stack.Screen name="sign-up" options={{ title: "Sign Up" }} />
+          <Stack.Screen name="map" options={{ title: "Map" }} />
+          <Stack.Screen name="results" options={{ title: "Results" }} />
+          <Stack.Screen name="library" options={{ title: "Library" }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </UserProvider>
   );
 }
