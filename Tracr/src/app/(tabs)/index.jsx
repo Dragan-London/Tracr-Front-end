@@ -18,9 +18,15 @@ export default function HomeScreen() {
 	const [error, setError] = useState(null);
 	const [dailyShapePoints, setDailyShapePoints] = useState(null);
 	const [dailyShapePath, setDailyShapePath] = useState(null);
+	const [targetShape, setTargetShape] = useState(null);
 
 	function handleStartPress() {
-		router.push("/map");
+		router.push({
+			pathname: "/map",
+			params: {
+				shape: JSON.stringify(targetShape),
+			},
+		});
 	}
 
 	function handleLibraryPress() {
@@ -37,6 +43,7 @@ export default function HomeScreen() {
 		for (let shape of shapes) {
 			if (shape.id === dailyShapeId) {
 				setDailyShapePath(shape.path);
+				setTargetShape(shape);
 				return convertPointsToPath(shape.path);
 			}
 		}
