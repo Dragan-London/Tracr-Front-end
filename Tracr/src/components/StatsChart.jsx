@@ -6,6 +6,8 @@ export default function StatsChart({ data, dateRange, timeframe, metric }) {
   const [spaces, setSpaces] = useState(7);
   const [dataSet, setDataSet] = useState(null);
 
+  console.log("data in stats chart>>", data);
+
   const week = ["mon", "tue", "wed", "thur", "fri", "sat", "sun"];
   const month = [
     "1st",
@@ -55,7 +57,6 @@ export default function StatsChart({ data, dateRange, timeframe, metric }) {
     "dec",
   ];
 
-  console.log("I am data in statschart>>>", data);
   useEffect(() => {
     if (data === null) return;
     const dataPoints = data.map((dataPoint, i) => {
