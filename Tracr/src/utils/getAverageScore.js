@@ -1,4 +1,4 @@
-import durationToMinutes from "./durationToMinutes";
+import durationToMinutes from "./durationToMinutes.js";
 
 export default function getAverageScore(expeditions, metric) {
   let metrics = [];

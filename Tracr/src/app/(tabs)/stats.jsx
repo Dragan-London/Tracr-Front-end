@@ -400,7 +400,7 @@ export default function StatsScreen() {
           `https://tracr-c546.onrender.com/api/users/${user_id}/expeditions?time=${timeframe}`,
         );
         const { expeditions } = data;
-        const parsedExpeditions = parseExpeditions(dummyData, timeframe);
+        const parsedExpeditions = parseExpeditions(expeditions, timeframe);
         if (timeframe === "year") {
           const monthlyAverages = getMonthlyAverages(parsedExpeditions);
           const dataPoints = monthlyAverages.map((month) => {
