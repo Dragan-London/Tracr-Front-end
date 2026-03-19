@@ -1,8 +1,10 @@
 import { useState } from "react";
 import {
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
-  View,
   TextInput,
   Pressable,
   Text,
@@ -76,7 +78,7 @@ export default function SignUpScreen() {
         throw new Error(data.message || "Sign up failed");
       }
 
-      router.back();
+      router.replace("/(tabs)");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -85,81 +87,94 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
+    >
       <ImageBackground
         src={backgroundImg}
         resizeMode="cover"
         style={styles.backgroundImage}
       />
-      <Text style={styles.title}>Sign Up</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        textContentType="oneTimeCode"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Repeat Password"
-        value={repeatPassword}
-        onChangeText={setRepeatPassword}
-        secureTextEntry
-        textContentType="oneTimeCode"
-      />
-
-      {error && <Text style={styles.errorText}>{error}</Text>}
-
-      <Pressable
-        style={styles.button}
-        onPress={handleSubmit}
-        disabled={isLoading}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.buttonText}>
-          {isLoading ? "Creating account..." : "Create Account"}
-        </Text>
-      </Pressable>
+        <Text style={styles.title}>Sign Up</Text>
 
-      <Pressable onPress={() => router.back()}>
-        <Text style={styles.link}>Already have an account? Log in</Text>
-      </Pressable>
-    </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          textContentType="oneTimeCode"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Repeat Password"
+          value={repeatPassword}
+          onChangeText={setRepeatPassword}
+          secureTextEntry
+          textContentType="oneTimeCode"
+        />
+
+        {error && <Text style={styles.errorText}>{error}</Text>}
+
+        <Pressable
+          style={styles.button}
+          onPress={handleSubmit}
+          disabled={isLoading}
+        >
+          <Text style={styles.buttonText}>
+            {isLoading ? "Creating account..." : "Create Account"}
+          </Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.back()}>
+          <Text style={styles.link}>Already have an account? Log in</Text>
+        </Pressable>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
   },
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.1,
+    opacity: 0.25,
   },
   title: {
     fontSize: 28,

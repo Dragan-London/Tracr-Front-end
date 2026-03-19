@@ -8,7 +8,8 @@ export default function PopUp({
   watchPosition,
   stopWatching,
   start,
-  selectedShape
+  selectedShape,
+  coords
 }) {
   function handleResume() {
     watchPosition();
@@ -22,7 +23,7 @@ export default function PopUp({
       pathname: "/results",
       params: {
         shape: JSON.stringify(selectedShape),
-        // runCoords: JSON.stringify(runCoords),
+        runCoords: JSON.stringify(coords),
       },
     });
     const timeElapsed = (Date.now() - start) / 1000;
