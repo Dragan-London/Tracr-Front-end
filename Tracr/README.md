@@ -1,50 +1,127 @@
-# Welcome to your Expo app 👋
+# <img src="https://i.ibb.co/v6WbSjWg/Tracr-logo.png" width="60" height="60"/> Tracr App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Tracr is a mobile application that transforms real-world movement into visual designs. Users are given a **daily challenge shape** (or can select one from a library) and attempt to recreate it by physically walking or running the route.
 
-## Get started
+Using GPS tracking, the app records the user’s path and compares it to the chosen shape, evaluating how closely the route matches the intended design.
 
-1. Install dependencies
+---
+## 🚀 Features
 
-   ```bash
-   npm install
-   ```
+* 📍 **GPS Route Tracking** – Record real-time movement using location services
+* 🎯 **Daily Challenges** – Try to recreate a new shape every day
+* 🧩 **Shape Library** – Choose from a collection of predefined designs
+* 📊 **Route Evaluation** – Compare your path to the target shape
+* 🗺️ **Map Visualisation** – View routes directly on an interactive map
+* 🏆 **Stats & Leaderboard** – Track progress and compete with others
+* 🔐 **Authentication** – Secure sign up and login system
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🛠️ Tech Stack
 
-In the output, you'll find options to open the app in a
+### Frontend
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+* **React Native** – Cross-platform mobile development
+* **Expo** – Simplified development and deployment
+* **Expo Router** – Navigation and routing
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Backend
 
-## Get a fresh project
+* **Express.js** – REST API server
+* **PostgreSQL** – Database for users, routes, and shapes
 
-When you're ready, run:
+### Maps & Location
+
+* **Expo Location** – Access GPS data
+* **React Native Maps** – Render maps and routes
+
+### Image & Shape Processing
+
+* Libraries such as **Jimp** and **PixelMatch** for comparing shapes and routes
+
+---
+
+## 🧠 Key Technical Challenges
+
+* Converting GPS coordinates (lat/long) into comparable shapes
+* Normalising routes for accurate comparison (scale, rotation, position)
+* Designing a fair and meaningful shape-matching algorithm
+* Managing real-time location updates efficiently
+* Creating a smooth and intuitive mobile user experience
+
+---
+
+# Tracr Frontend
+
+This repository contains the **frontend** (React Native + Expo) implementation of Tracr app which is a mobile app that turns real-world user routes (walking/running) into shapes where users are given a daily challenge (a shape) and attempt to recreate it by completing the route in the real world.
+
+## 🚀 Frontend Tech Stack 
+
+- **React Native** (shared codebase for iOS & Android)
+- **Expo** (development tooling, build pipeline, and runtimes)
+- **Expo Router** (file-based navigation / routing)
+- **Expo Location** + **React Native Maps** (GPS tracking + map rendering)
+
+## 🧠 Core UX Flow
+
+1. User selects a shape (daily challenge or from library)
+2. User starts a run and app begins GPS tracking via `expo-location`
+3. Map updates live using `react-native-maps`
+4. When completed, the tracked path is compared against the template shape
+5. Results (match score, stats) are shown and optionally stored via API
+
+## 📥 Getting Started (Frontend)
+
+### 1) Install dependencies
+
+```bash
+npm install
+```
+
+### 2) Run the app
+
+```bash
+npm run start
+```
+
+Choose to run the app on:
+
+- Android emulator
+- iOS simulator
+- Expo Go (physical device)
+- Web (limited support)
+
+### 3) Optional: reset starter project
+
+Restores the starter template and moves current app logic into `app-example/`:
 
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🔌 Backend Integration (API)
 
-## Learn more
+This frontend is designed to work with an Express.js backend API ([link to repo](https://github.com/S-Kirwan/Tracr-backend/)) that provides:
 
-To learn more about developing your project with Expo, look at the following resources:
+- Shape data / library endpoints
+- Route result storage & retrieval
+- User sign-up / login
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+In this app, look for API calls in the `src/app/` route components and the `UserContext`.
 
-## Join the community
+## 🧪 Useful Scripts
 
-Join our community of developers creating universal apps.
+- `npm run start` – start Expo development server
+- `npm run android` – start on Android emulator
+- `npm run ios` – start on iOS simulator
+- `npm run web` – start in browser
+- `npm run lint` – run ESLint checks
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 📬 Contact
+
+For questions or collaboration, feel free to reach out or open an issue.
+
+---
+
+⭐ If you find this project useful, consider giving it a star!

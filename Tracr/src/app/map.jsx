@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, View, Animated, useAnimatedValue, Easing } from "react-native";
 import MapView, { Polyline } from "react-native-maps";
 import { useLocalSearchParams } from "expo-router";
-
+import LoadingOverlay from "../components/LoadingPage"
 
 let start;
 let date;
@@ -29,8 +29,14 @@ export default function MapScreen() {
   const scaleAnim = useAnimatedValue(1);
   const opacityAnim = useAnimatedValue(1);
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (countdown === 0) return;
+    const timer = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (loading || countdown === 0) return;
 
     scaleAnim.setValue(1);
     opacityAnim.setValue(1);
@@ -51,7 +57,7 @@ export default function MapScreen() {
         useNativeDriver: true,
       })
     ]).start();
-  }, [countdown]);
+  }, [loading, countdown]);
 
 
   async function watchPosition() {
@@ -110,7 +116,7 @@ export default function MapScreen() {
   }, []);
 
   useEffect(() => {
-    if (trackingStarted) return;
+    if (loading || trackingStarted) return;
 
     const interval = setInterval(() => {
       setCountdown((prev) => {
@@ -119,6 +125,7 @@ export default function MapScreen() {
           setTrackingStarted(true);
           start = Date.now();
           date = new Date();
+          clearInterval(interval);
           return 0;
         }
 
@@ -127,7 +134,7 @@ export default function MapScreen() {
     }, 1300);
 
     return () => clearInterval(interval);
-  }, [trackingStarted]);
+  }, [loading, trackingStarted]);
 
   const stopWatching = () => {
     if (!locationRef.current) return;
@@ -141,8 +148,9 @@ export default function MapScreen() {
     setModalVisible(true);
   };
 
-  if (isLoading) return <LoadingPage />;
-
+  if (loading) {
+      return <LoadingOverlay visible={true} />;
+    }
 
   return (
     <View style={styles.container}>
@@ -177,6 +185,7 @@ export default function MapScreen() {
         stopWatching={stopWatching}
         start={start}
         selectedShape={selectedShape}
+        coords={coords}
       />
       <Pressable
         style={({ pressed }) => [

@@ -5,7 +5,9 @@ import { UserContext } from "@/src/contexts/UserContext";
 import {
   Image,
   ImageBackground,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
@@ -76,7 +78,11 @@ export default function MainScreen() {
         animationType="fade"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
+        >
           <View style={styles.modalBox}>
             <Text style={styles.modalTitle}>Login</Text>
 
@@ -114,7 +120,7 @@ export default function MainScreen() {
               <Text style={styles.cancelText}>Cancel</Text>
             </Pressable>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <View style={styles.buttonsContainer}>
