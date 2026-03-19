@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 0,
+    paddingTop: 86,
   },
   logo: {
     marginBottom: 40,
