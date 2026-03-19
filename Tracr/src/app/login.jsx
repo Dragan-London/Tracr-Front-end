@@ -5,7 +5,9 @@ import { UserContext } from "@/src/contexts/UserContext";
 import {
   Image,
   ImageBackground,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
@@ -20,6 +22,7 @@ export default function MainScreen() {
   const { height } = useWindowDimensions();
   const imageSize = (height * 1.6) / 3;
   const { setUser } = useContext(UserContext);
+  const placeholderColor = "#666";
 
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("");
@@ -75,7 +78,11 @@ export default function MainScreen() {
         animationType="fade"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
+        >
           <View style={styles.modalBox}>
             <Text style={styles.modalTitle}>Login</Text>
 
@@ -84,6 +91,7 @@ export default function MainScreen() {
             <TextInput
               style={styles.input}
               placeholder="Username"
+              placeholderTextColor={placeholderColor}
               value={username}
               onChangeText={setUsername}
               autoCapitalize="none"
@@ -91,6 +99,7 @@ export default function MainScreen() {
             <TextInput
               style={styles.input}
               placeholder="Password"
+              placeholderTextColor={placeholderColor}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -111,7 +120,7 @@ export default function MainScreen() {
               <Text style={styles.cancelText}>Cancel</Text>
             </Pressable>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <View style={styles.buttonsContainer}>
@@ -223,6 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 14,
     backgroundColor: "#f9f9f9",
+    color: "#111",
   },
   submitButton: {
     width: "100%",
