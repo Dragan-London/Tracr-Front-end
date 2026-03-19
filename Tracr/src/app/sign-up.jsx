@@ -20,6 +20,7 @@ export default function SignUpScreen() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const placeholderColor = "#666";
 
   async function handleSubmit() {
     setError(null);
@@ -96,12 +97,14 @@ export default function SignUpScreen() {
       <TextInput
         style={styles.input}
         placeholder="Name"
+        placeholderTextColor={placeholderColor}
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={styles.input}
         placeholder="Username"
+        placeholderTextColor={placeholderColor}
         value={username}
         onChangeText={setUsername}
         autoCapitalize="none"
@@ -109,6 +112,7 @@ export default function SignUpScreen() {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor={placeholderColor}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -117,6 +121,7 @@ export default function SignUpScreen() {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor={placeholderColor}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -125,6 +130,7 @@ export default function SignUpScreen() {
       <TextInput
         style={styles.input}
         placeholder="Repeat Password"
+        placeholderTextColor={placeholderColor}
         value={repeatPassword}
         onChangeText={setRepeatPassword}
         secureTextEntry
@@ -175,6 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 14,
     backgroundColor: "#fff",
+    color: "#111",
   },
   button: {
     width: "100%",
