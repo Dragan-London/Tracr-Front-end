@@ -1,4 +1,4 @@
-import durationToMinutes from "./durationToMinutes";
+import durationToMinutes from "./durationToMinutes.js";
 
 const emptyData = {
   accuracy: 0,
@@ -9,7 +9,7 @@ const emptyData = {
   userId: 0,
 };
 
-export default function parseExpeditons(expeditions, timeframe) {
+export default function parseExpeditions(expeditions, timeframe) {
   let period;
   switch (timeframe) {
     case "week":
@@ -19,14 +19,12 @@ export default function parseExpeditons(expeditions, timeframe) {
       period = 30;
       break;
     case "year":
-      period = 12;
-      break;
-    case "all time":
-      period = 12;
+      period = 365;
       break;
   }
 
-  expeditions.forEach((expedition) => {
+  const expeditionsClone = structuredClone(expeditions);
+  expeditionsClone.forEach((expedition) => {
     expedition.duration = durationToMinutes(expedition.duration);
   });
 
@@ -42,17 +40,16 @@ export default function parseExpeditons(expeditions, timeframe) {
 
   let counter = 0;
   for (let j = 0; j < baselineData.length; j++) {
-    if (expeditions[counter] !== undefined) {
+    if (expeditionsClone[counter] !== undefined) {
       if (
         baselineData[j].timestamp.slice(0, 10) ===
-        expeditions[counter].timestamp.slice(0, 10)
+        expeditionsClone[counter].timestamp.slice(0, 10)
       ) {
-        baselineData[j] = expeditions[counter];
+        baselineData[j] = expeditionsClone[counter];
         counter++;
       }
     }
   }
+
   return baselineData;
 }
-
-// parseExpeditons(expeditions, "month");

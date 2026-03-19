@@ -14,10 +14,6 @@ export default function TimeframeButtons({ timeframe, setTimeframe }) {
     setTimeframe("year");
   }
 
-  function allTimePressed() {
-    setTimeframe("all time");
-  }
-
   return (
     <View style={styles.container}>
       <Pressable
@@ -50,16 +46,6 @@ export default function TimeframeButtons({ timeframe, setTimeframe }) {
       >
         <Text style={styles.buttonText}>Year</Text>
       </Pressable>
-      <Pressable
-        onPress={allTimePressed}
-        style={({ pressed }) => [
-          styles.button,
-          pressed && styles.buttonPressed,
-          timeframe === "all time" && styles.buttonIsActive,
-        ]}
-      >
-        <Text style={styles.buttonText}>All Time</Text>
-      </Pressable>
     </View>
   );
 }
@@ -67,6 +53,7 @@ export default function TimeframeButtons({ timeframe, setTimeframe }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    justifyContent: "space-between",
     width: "100%",
     alignSelf: "center",
     marginBottom: 20,
@@ -74,6 +61,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
+    width: "30%",
     margin: 5,
     fontWeight: "900",
     borderWidth: 3,
