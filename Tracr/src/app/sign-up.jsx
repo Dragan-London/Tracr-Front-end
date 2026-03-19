@@ -76,7 +76,7 @@ export default function SignUpScreen() {
         throw new Error(data.message || "Sign up failed");
       }
 
-      router.back();
+      router.replace("/(tabs)");
     } catch (err) {
       setError(err.message);
     } finally {
