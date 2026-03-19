@@ -4,16 +4,54 @@ import { ThemedText } from "@/src/components/themed-text";
 import { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import Svg, { Polyline } from "react-native-svg";
+import { interpolatePaths, calculateHits } from "../utils/accuracyCalculator"
+import { createSvg } from "../utils/pathPlotter";
+import DebugGrid from "../components/DebugGrid";
+import { ScrollView } from "react-native";
 
 export default function ResultsScreen() {
-  const [modalVisible, setModalVisible] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const [points, setPoints] = useState(0);
+  const [svgData, setSvgData] = useState({
+    user: { svgString: "" },
+    target: { svgString: "" }
+  });
   const navigation = useNavigation();
+
+  const [debugGrids, setDebugGrids] = useState({
+    target: null,
+    user: null,
+  });
 
   const { shape, runCoords } = useLocalSearchParams();
   const selectedShape = JSON.parse(shape);
-  const AnimatedSvg = Animated.createAnimatedComponent(Svg)
+  // const userPath = JSON.parse(runCoords);
+  const AnimatedSvg = Animated.createAnimatedComponent(Svg);
+
+  const userPath = [
+    { "latitude": -32.2515089, "longitude": 148.6301891 }, // Bottom Tip (Starting Point)
+    { "latitude": -32.2428263, "longitude": 148.6225300 },
+    { "latitude": -32.2339923, "longitude": 148.6161408 },
+    { "latitude": -32.2254463, "longitude": 148.6126410 },
+    { "latitude": -32.2176107, "longitude": 148.6129534 }, // Far Left Curve
+    { "latitude": -32.2110277, "longitude": 148.6172626 },
+    { "latitude": -32.2066401, "longitude": 148.6246986 }, // Top Left Lobe
+    { "latitude": -32.2064211, "longitude": 148.6324460 },
+    { "latitude": -32.2108001, "longitude": 148.6375256 },
+    { "latitude": -32.2150135, "longitude": 148.6301891 }, // Top Notch (Deepened Center)
+    { "latitude": -32.2108001, "longitude": 148.6228526 },
+    { "latitude": -32.2064211, "longitude": 148.6279322 },
+    { "latitude": -32.2066401, "longitude": 148.6356678 }, // Top Right Lobe
+    { "latitude": -32.2110277, "longitude": 148.6461156 },
+    { "latitude": -32.2176107, "longitude": 148.6514248 }, // Far Right Curve
+    { "latitude": -32.2254463, "longitude": 148.6507372 },
+    { "latitude": -32.2339923, "longitude": 148.6492374 },
+    { "latitude": -32.2428263, "longitude": 148.6388482 },
+    { "latitude": -32.2515089, "longitude": 148.6301891 }  // Back to Bottom Tip
+  ]
+
+
+
 
   const handleSave = () => {
     navigation.navigate("stats")
@@ -42,6 +80,23 @@ export default function ResultsScreen() {
   const shareAnim = useAnimatedValue(0);
 
   useEffect(() => {
+    const targetArray = selectedShape.path.map(p => [p.x, p.y]);
+    const userArray = userPath.map(p => [p.longitude, -p.latitude]);
+
+    const targetSvg = createSvg(targetArray, 300);
+    const userSvg = createSvg(userArray, 300);
+
+    setSvgData({ user: userSvg, target: targetSvg });
+
+    const targetGrid = interpolatePaths(targetSvg.points, 50, 0);
+    const userGrid = interpolatePaths(userSvg.points, 50, 2);
+    const score = calculateHits(targetGrid, userGrid);
+
+    setDebugGrids({
+      target: targetGrid,
+      user: userGrid,
+    });
+
     const accuracyListener = accuracyAnim.addListener(({ value }) => {
       setAccuracy(Math.floor(value));
     })
@@ -63,7 +118,7 @@ export default function ResultsScreen() {
           useNativeDriver: true,
         }),
         Animated.timing(accuracyAnim, {
-          toValue: 73,
+          toValue: score,
           duration: 2500,
           useNativeDriver: false,
         })
@@ -72,7 +127,7 @@ export default function ResultsScreen() {
       Animated.delay(300),
 
       Animated.timing(pointsAnim, {
-        toValue: 2000,
+        toValue: Math.round(score * 5 / 100) * 200,
         duration: 2000,
         useNativeDriver: false,
       }),
@@ -95,8 +150,6 @@ export default function ResultsScreen() {
           duration: 800,
           useNativeDriver: true,
         }),
-
-
       ])
 
     ]).start();
@@ -110,7 +163,7 @@ export default function ResultsScreen() {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <ImageBackground
         source={{ uri: "https://img.freepik.com/premium-vector/children-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg" }}
         resizeMode="cover"
@@ -118,23 +171,24 @@ export default function ResultsScreen() {
       />
 
       <View style={styles.imagesContainer}>
-        {/* <Animated.Image
-          source={{ uri: "https://images.squarespace-cdn.com/content/v1/5b4dbfd8da02bcfcf39bce03/1710251915806-Z7CK432GWPNKMPPG9OG1/heart4-2022-02-14-at-11.10.03.jpg" }}
-          style={[
-            styles.userRoute,
-            { transform: [{ translateX: slideRightAnim }] },]} /> */}
-
-        {/* <Animated.Image source={require("@/assets/images/red-outline-heart2.jpg")}
-          style={[
-            styles.targetRoute,
-            { transform: [{ translateX: slideLeftAnim }] },]} /> */}
         <AnimatedSvg width={300} height={300} style={[
-            styles.targetRoute,
-            { transform: [{ translateX: slideLeftAnim }] },]}>
+          styles.userRoute,
+          { transform: [{ translateX: slideRightAnim }] },]}>
           <Polyline
-            points={selectedShape.path
-              .map(p => `${p.x * 300},${p.y * 300}`)
-              .join(" ")}
+            points={svgData.user.svgString}
+            fill="none"
+            stroke="red"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </AnimatedSvg>
+
+        <AnimatedSvg width={300} height={300} style={[
+          styles.targetRoute,
+          { transform: [{ translateX: slideLeftAnim }] },]}>
+          <Polyline
+            points={svgData.target.svgString}
             fill="none"
             stroke="red"
             strokeWidth="4"
@@ -184,8 +238,19 @@ export default function ResultsScreen() {
           <ThemedText>Share</ThemedText>
         </Pressable>
       </Animated.View>
+      <View>
+        {/* Please keep the code here for debugging */}
+        {/* {debugGrids.target && (
+          <DebugGrid
+            target={debugGrids.target}
+            user={debugGrids.user}r
+            size={300}
+            alignItems="center"
+          />
+        )} */} 
+      </View>
+    </ScrollView>
 
-    </View>
   );
 }
 
@@ -211,6 +276,7 @@ const styles = StyleSheet.create({
   userRoute: {
     width: 300,
     height: 300,
+    position: "absolute",
   },
 
   targetRoute: {

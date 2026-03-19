@@ -7,7 +7,6 @@ import { Pressable, StyleSheet, View, Animated, useAnimatedValue, Easing } from 
 import MapView, { Polyline } from "react-native-maps";
 import { useLocalSearchParams } from "expo-router";
 
-
 let start;
 let date;
 
@@ -177,6 +176,7 @@ export default function MapScreen() {
         stopWatching={stopWatching}
         start={start}
         selectedShape={selectedShape}
+        coords={coords}
       />
       <Pressable
         style={({ pressed }) => [
