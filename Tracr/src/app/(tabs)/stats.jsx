@@ -5,8 +5,9 @@ import StatsChart from "@/src/components/StatsChart";
 import TimeframeButtons from "@/src/components/TimeframeButtons";
 import getAverageScore from "@/src/utils/getAverageScore";
 import getDateRange from "@/src/utils/getDateRange";
-import getDifference from "@/src/utils/getDifference";
 import getMonthlyAverages from "@/src/utils/getMonthlyAverages";
+import getScoreComparison from "@/src/utils/getScoreComparison";
+import getShapeComparison from "@/src/utils/getShapeComparison";
 import parseExpeditions from "@/src/utils/parseExpeditions";
 import { Text } from "@react-navigation/elements";
 import axios from "axios";
@@ -23,6 +24,7 @@ export default function StatsScreen() {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState(null);
   const [scoreDifference, setScoreDifference] = useState(null);
+  const [totalShapeDifference, setTotalShapeDifference] = useState(null);
 
   const dummyData = [
     {
@@ -398,7 +400,7 @@ export default function StatsScreen() {
           `https://tracr-c546.onrender.com/api/users/${user_id}/expeditions?time=${timeframe}`,
         );
         const { expeditions } = data;
-        const parsedExpeditions = parseExpeditions(expeditions, timeframe);
+        const parsedExpeditions = parseExpeditions(dummyData, timeframe);
         if (timeframe === "year") {
           const monthlyAverages = getMonthlyAverages(parsedExpeditions);
           const dataPoints = monthlyAverages.map((month) => {
@@ -413,8 +415,13 @@ export default function StatsScreen() {
         }
 
         setScore(getAverageScore(parsedExpeditions, metric));
-        setScoreDifference(getDifference(metric, timeframe, score, user_id));
+        setScoreDifference(
+          getScoreComparison(metric, timeframe, score, user_id),
+        );
         setTotalShapes(expeditions.length);
+        setTotalShapeDifference(
+          getShapeComparison(timeframe, totalShapes, user_id),
+        );
         if (expeditions) setLoading(false);
         setDateRange(getDateRange(timeframe));
       } catch (err) {
@@ -451,6 +458,7 @@ export default function StatsScreen() {
           totalShapes={totalShapes}
           timeframe={timeframe}
           scoreDifference={scoreDifference}
+          totalShapeDifference={totalShapeDifference}
         />
       </View>
       <StatsChart
