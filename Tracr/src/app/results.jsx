@@ -206,7 +206,7 @@ export default function ResultsScreen() {
           <Polyline
             points={svgData.target.svgString}
             fill="none"
-            stroke="red"
+            stroke="blue"
             strokeWidth="4"
           />
         </AnimatedSvg>
@@ -278,10 +278,14 @@ const styles = StyleSheet.create({
   },
 
   imagesContainer: {
-    height: 300,
-    width: 300,
+    height: 350,
+    width: 350,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 12,
+    borderColor: "#00000021",
+    borderWidth: 2
   },
 
   backgroundImage: {
