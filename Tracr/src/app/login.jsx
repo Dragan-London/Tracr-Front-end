@@ -22,6 +22,7 @@ export default function MainScreen() {
   const { height } = useWindowDimensions();
   const imageSize = (height * 1.6) / 3;
   const { setUser } = useContext(UserContext);
+  const placeholderColor = "#666";
 
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("");
@@ -90,6 +91,7 @@ export default function MainScreen() {
             <TextInput
               style={styles.input}
               placeholder="Username"
+              placeholderTextColor={placeholderColor}
               value={username}
               onChangeText={setUsername}
               autoCapitalize="none"
@@ -97,6 +99,7 @@ export default function MainScreen() {
             <TextInput
               style={styles.input}
               placeholder="Password"
+              placeholderTextColor={placeholderColor}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -229,6 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 14,
     backgroundColor: "#f9f9f9",
+    color: "#111",
   },
   submitButton: {
     width: "100%",
