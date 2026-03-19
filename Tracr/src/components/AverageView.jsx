@@ -2,7 +2,14 @@ import { Text } from "@react-navigation/elements";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-export default function AverageView({ metric, score, totalShapes, timeframe }) {
+export default function AverageView({
+  metric,
+  score,
+  totalShapes,
+  timeframe,
+  scoreDifference,
+  totalShapeDifference,
+}) {
   const [icon, setIcon] = useState(require("@/assets/images/scoreIcon.png"));
 
   useEffect(() => {
@@ -29,13 +36,13 @@ export default function AverageView({ metric, score, totalShapes, timeframe }) {
           </View>
         </View>
         <View style={styles.comparison}>
-          {score > 0 ? (
+          {scoreDifference > 0 ? (
             <Text style={[styles.scorePercent, styles.increasedScore]}>
-              ↑{score}%
+              ↑{scoreDifference}%
             </Text>
           ) : (
             <Text style={[styles.scorePercent, styles.decreasedScore]}>
-              ↓{score}%
+              ↓{scoreDifference}%
             </Text>
           )}
           {timeframe === "all time" ? (
@@ -61,13 +68,13 @@ export default function AverageView({ metric, score, totalShapes, timeframe }) {
           </View>
         </View>
         <View style={styles.comparison}>
-          {score > 0 ? (
+          {totalShapeDifference > 0 ? (
             <Text style={[styles.scorePercent, styles.increasedScore]}>
-              ↑{score}%
+              ↑{totalShapeDifference}%
             </Text>
           ) : (
             <Text style={[styles.scorePercent, styles.decreasedScore]}>
-              ↓{score}%
+              ↓{totalShapeDifference}%
             </Text>
           )}
           {timeframe === "all time" ? (
