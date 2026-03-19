@@ -37,16 +37,10 @@ function normaliseTraceCoords(coords, boundingBox, svgWidth, svgHeight) {
     const xOffset = (svgWidth - width * scale) / 2;
     const yOffset = (svgHeight - height * scale) / 2;
 
-    const normalisedRoute = coords.map((point) => {
-        const normalisedPoint = {
-            x: (point[0] - boundingBox.minX) * scale + xOffset,
-            y: ((point[1] - boundingBox.minY) * scale + yOffset),
-        };
-
-        return normalisedPoint;
-    });
-
-    return normalisedRoute;
+    return coords.map((point) => ({
+        x: ((point[0] - boundingBox.minX) * scale + xOffset) / svgWidth,
+        y: ((point[1] - boundingBox.minY) * scale + yOffset) / svgHeight,
+    }));
 }
 
 function parseCoords(coords) {
@@ -62,12 +56,15 @@ function parseCoords(coords) {
 
 export function createSvg(coordinates, size) {
     const boundingBox = createBoundingBox(coordinates);
-    const points = normaliseTraceCoords(coordinates, boundingBox, size, size);
+    const normalisedPoints = normaliseTraceCoords(coordinates, boundingBox, size, size); // normalized (0–1)
 
-    console.log("POINTS", points)
-    console.log("svgString", parseCoords(points))
+    const pixelPoints = normalisedPoints.map(p => ({ // pixel version (for SVG only)
+        x: p.x * size, 
+        y: p.y * size
+    })); 
+
     return {
-        points: points, // Array of {x: , y: }
-        svgString: parseCoords(points) // The string for <Polyline /> e.g. "150.0000 280.7813, 90.9375 238.5938,..."
+        points: normalisedPoints,           // for accuracy
+        svgString: parseCoords(pixelPoints) // for rendering
     };
 }
