@@ -8,6 +8,7 @@ import { interpolatePaths, calculateHits } from "../utils/accuracyCalculator"
 import { createSvg } from "../utils/pathPlotter";
 import DebugGrid from "../components/DebugGrid";
 import { ScrollView } from "react-native";
+import LoadingOverlay from "../components/LoadingPage"
 
 export default function ResultsScreen() {
   const [accuracy, setAccuracy] = useState(0);
@@ -17,6 +18,12 @@ export default function ResultsScreen() {
     target: { svgString: "" }
   });
   const navigation = useNavigation();
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const [debugGrids, setDebugGrids] = useState({
     target: null,
@@ -52,7 +59,6 @@ export default function ResultsScreen() {
 
 
 
-
   const handleSave = () => {
     navigation.navigate("stats")
   }
@@ -80,6 +86,7 @@ export default function ResultsScreen() {
   const shareAnim = useAnimatedValue(0);
 
   useEffect(() => {
+    if (loading) return
     const targetArray = selectedShape.path.map(p => [p.x, p.y]);
     const userArray = userPath.map(p => [p.longitude, -p.latitude]);
 
@@ -159,8 +166,11 @@ export default function ResultsScreen() {
       pointsAnim.removeListener(pointsListener)
     };
 
-  }, []);
+  }, [loading]);
 
+  if (loading) {
+    return <LoadingOverlay visible={true} />;
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -247,7 +257,7 @@ export default function ResultsScreen() {
             size={300}
             alignItems="center"
           />
-        )} */} 
+        )} */}
       </View>
     </ScrollView>
 

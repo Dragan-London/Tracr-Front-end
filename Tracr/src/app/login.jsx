@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "@/src/contexts/UserContext";
 import {
   Image,
+  ImageBackground,
   Modal,
   Pressable,
   StyleSheet,
@@ -11,6 +12,9 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+
+const backgroundImg =
+  "https://slack-imgs.com/?c=1&o1=ro&url=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fchildren-drawings-seamless-pattern-kids-doodle-texture-hand-drawn-cute-house-cat-frog-unicorn-baby-seamless-pattern-editable-stroke-vector-illustration-white-background_192280-1324.jpg";
 
 export default function MainScreen() {
   const { height } = useWindowDimensions();
@@ -55,8 +59,13 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={{ uri: backgroundImg }}
+        resizeMode="cover"
+        style={styles.backgroundImage}
+      />
       <Image
-        source={require("@/assets/images/Tracer_img_no.6.png")}
+        source={require("@/assets/images/Tracr-logo.png")}
         style={[styles.logo, { width: imageSize, height: imageSize }]}
         resizeMode="contain"
       />
@@ -138,9 +147,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     paddingTop: 86,
   },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.2,
+  },
   logo: {
     marginBottom: 40,
-    mixBlendMode: "multiply",
+    opacity: 1,
   },
   buttonsContainer: {
     width: "60%",
