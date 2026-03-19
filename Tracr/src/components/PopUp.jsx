@@ -27,7 +27,7 @@ export default function PopUp({
 			params: {
 				shape: JSON.stringify(selectedShape),
 				runCoords: JSON.stringify(coords),
-				duration: duration,
+				duration: JSON.stringify(duration),
 			},
 		});
 	}
