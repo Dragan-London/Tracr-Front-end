@@ -13,7 +13,7 @@ export default function AverageView({ metric, score, totalShapes, timeframe }) {
       case "distance":
         setIcon(require("@/assets/images/distance.png"));
         break;
-      case "duration":
+      case "time":
         setIcon(require("@/assets/images/stopwatch.png"));
     }
   }, [metric]);
@@ -27,6 +27,22 @@ export default function AverageView({ metric, score, totalShapes, timeframe }) {
             <Text style={[styles.averageScore, styles.text]}>{score}</Text>
             <Text style={[styles.metric, styles.text]}>{metric}</Text>
           </View>
+        </View>
+        <View style={styles.comparison}>
+          {score > 0 ? (
+            <Text style={[styles.scorePercent, styles.increasedScore]}>
+              ↑{score}%
+            </Text>
+          ) : (
+            <Text style={[styles.scorePercent, styles.decreasedScore]}>
+              ↓{score}%
+            </Text>
+          )}
+          {timeframe === "all time" ? (
+            <Text style={styles.timeFrameText}>all time</Text>
+          ) : (
+            <Text style={styles.timeFrameText}>{timeframe}</Text>
+          )}
         </View>
       </View>
       <View style={styles.scoreCard}>
@@ -43,6 +59,22 @@ export default function AverageView({ metric, score, totalShapes, timeframe }) {
             </Text>
             <Text style={[styles.metric, styles.text]}>Total shapes</Text>
           </View>
+        </View>
+        <View style={styles.comparison}>
+          {score > 0 ? (
+            <Text style={[styles.scorePercent, styles.increasedScore]}>
+              ↑{score}%
+            </Text>
+          ) : (
+            <Text style={[styles.scorePercent, styles.decreasedScore]}>
+              ↓{score}%
+            </Text>
+          )}
+          {timeframe === "all time" ? (
+            <Text style={styles.timeFrameText}>all time</Text>
+          ) : (
+            <Text style={styles.timeFrameText}>{timeframe}</Text>
+          )}
         </View>
       </View>
     </View>
@@ -96,5 +128,32 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
     paddingBottom: 7,
+  },
+  comparison: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 10,
+    alignItems: "center",
+  },
+  scorePercent: {
+    backgroundColor: "#abffb3",
+    borderRadius: 5,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 2,
+    paddingBottom: 2,
+    fontFamily: "ui-monospace",
+    textAlign: "right",
+  },
+  increasedScore: {
+    backgroundColor: "#abffb3",
+  },
+  decreasedScore: {
+    backgroundColor: "#ffa0a0",
+  },
+  timeFrameText: {
+    fontFamily: "ui-monospace",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });
