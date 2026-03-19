@@ -11,6 +11,7 @@ import {
 import { router } from "expo-router"
 import { useState } from "react";
 import { shapes } from "../../data/shapes";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Shapes() {
   const [selectedShape, setSelectedShape] = useState(null);
@@ -58,6 +59,7 @@ export default function Shapes() {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <ImageBackground
       source={{ uri: bgImage3 }}
       resizeMode="cover"
@@ -120,6 +122,7 @@ export default function Shapes() {
         </View>
       </Modal>
     </ImageBackground>
+    </SafeAreaView>
   );
 }
 
@@ -130,7 +133,7 @@ const styles = StyleSheet.create({
 
   listContent: {
     paddingHorizontal: 6,
-    paddingTop: 40,
+    paddingTop: 60,
     paddingBottom: 12,
   },
 
