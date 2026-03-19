@@ -1,5 +1,5 @@
 import { StyleSheet, View, Pressable, Modal, ImageBackground, Animated, useAnimatedValue, Share } from "react-native";
-import { useNavigation } from "expo-router";
+import { router } from "expo-router";
 import { ThemedText } from "@/src/components/themed-text";
 import { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
@@ -17,7 +17,6 @@ export default function ResultsScreen() {
     user: { svgString: "" },
     target: { svgString: "" }
   });
-  const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -60,11 +59,18 @@ export default function ResultsScreen() {
 
 
   const handleSave = () => {
-    navigation.navigate("stats")
+    router.push({
+      pathname: "/stats"
+    });
   }
 
   const handleRetry = () => {
-    navigation.navigate("map")
+    router.push({
+      pathname: "/map",
+      params: {
+        shape: JSON.stringify(selectedShape),
+      },
+    });
   }
 
   const handleShare = async () => {
