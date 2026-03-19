@@ -30,7 +30,7 @@ export default function RootLayout() {
           <Stack.Screen name="sign-up" options={{ title: "Sign Up" }} />
           <Stack.Screen name="map" options={{ title: "Map" }} />
           <Stack.Screen name="results" options={{ title: "Results" }} />
-          <Stack.Screen name="library" options={{ title: "Library" }} />
+          <Stack.Screen name="library" options={{ title: "Library", headerShown: true, headerTransparent: true, headerBackTitle: "Home"}} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
