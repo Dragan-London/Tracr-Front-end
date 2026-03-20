@@ -11,7 +11,6 @@ Using GPS tracking, the app records the user’s path and compares it to the cho
 * 🎯 **Daily Challenges** – Try to recreate a new shape every day
 * 🧩 **Shape Library** – Choose from a collection of predefined designs
 * 📊 **Route Evaluation** – Compare your path to the target shape
-* 🗺️ **Map Visualisation** – View routes directly on an interactive map
 * 🏆 **Stats & Leaderboard** – Track progress and compete with others
 * 🔐 **Authentication** – Secure sign up and login system
 
@@ -37,14 +36,14 @@ Using GPS tracking, the app records the user’s path and compares it to the cho
 
 ### Image & Shape Processing
 
-* Libraries such as **Jimp** and **PixelMatch** for comparing shapes and routes
+* Grid-based path comparison algorithm (using normalisation, interpolation, and % overlap calculation)
 
 ---
 
 ## 🧠 Key Technical Challenges
 
 * Converting GPS coordinates (lat/long) into comparable shapes
-* Normalising routes for accurate comparison (scale, rotation, position)
+* Normalising routes for accurate comparison and interpolating between points
 * Designing a fair and meaningful shape-matching algorithm
 * Managing real-time location updates efficiently
 * Creating a smooth and intuitive mobile user experience
@@ -64,7 +63,7 @@ This repository contains the **frontend** (React Native + Expo) implementation o
 
 ## 🧠 Core UX Flow
 
-1. User selects a shape (daily challenge or from library)
+1. User gets assigned a daily challenge (or choose to select a shape of their choice from the library)
 2. User starts a run and app begins GPS tracking via `expo-location`
 3. Map updates live using `react-native-maps`
 4. When completed, the tracked path is compared against the template shape
