@@ -16,7 +16,7 @@ export default function getDateRange(timeframe) {
         return (dateRange = `${today} - ${day}/${month - 1}/${year}`);
       }
     case "year":
-      return (dateRange = `${today} - ${day}/${month}/${year - 1}`);
+      return (dateRange = `${year}`);
   }
   return dateRange;
 }

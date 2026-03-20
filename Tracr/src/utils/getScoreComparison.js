@@ -1,5 +1,7 @@
 import axios from "axios";
+import durationToMinutes from "./durationToMinutes.js";
 import getAverageScore from "./getAverageScore.js";
+
 export default async function getScoreComparison(
   metric,
   timeframe,
@@ -11,6 +13,11 @@ export default async function getScoreComparison(
   );
 
   const { expeditions } = data;
+
+  const parsedExpeditions = expeditions.map((expedition) => {
+    expedition.duration = durationToMinutes(expedition.duration);
+    return expedition;
+  });
 
   let period;
   switch (timeframe) {
@@ -34,7 +41,7 @@ export default async function getScoreComparison(
 
   const comparisonPeriodExpeditions = [];
 
-  for (let expedition of expeditions) {
+  for (let expedition of parsedExpeditions) {
     new Date(expedition.timestamp).getTime() > comparisonPeriodStart &&
       new Date(expedition.timestamp).getTime() < comparisonPeriodEnd;
     {
@@ -43,10 +50,14 @@ export default async function getScoreComparison(
   }
 
   const comparisonScore = getAverageScore(comparisonPeriodExpeditions, metric);
+  console.log("score>>>", score);
+  console.log("comparison >>>", comparisonScore);
 
   const scoreDifference = Math.round(
-    ((score - comparisonScore) / comparisonScore) * 100,
+    ((score - comparisonScore) /
+      (comparisonScore === 0 ? 1 : comparisonScore)) *
+      100,
   );
-
+  console.log("score difference >>>", scoreDifference);
   return scoreDifference;
 }

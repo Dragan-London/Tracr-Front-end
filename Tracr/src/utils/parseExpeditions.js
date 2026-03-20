@@ -28,6 +28,8 @@ export default function parseExpeditions(expeditions, timeframe) {
     expedition.duration = durationToMinutes(expedition.duration);
   });
 
+  console.log("expeditions clone>>", expeditionsClone);
+
   const baselineData = [];
 
   for (let i = 0; i < period; i++) {
@@ -46,6 +48,13 @@ export default function parseExpeditions(expeditions, timeframe) {
         expeditionsClone[counter].timestamp.slice(0, 10)
       ) {
         baselineData[j] = expeditionsClone[counter];
+        counter++;
+      }
+      while (
+        expeditionsClone[counter] !== undefined &&
+        expeditionsClone[counter].timestamp.slice(0, 10) ===
+          baselineData[j].timestamp.slice(0, 10)
+      ) {
         counter++;
       }
     }
