@@ -1,6 +1,6 @@
 import { ThemedText } from "@/src/components/themed-text";
 import axios from "axios";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import {
   Animated,
@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import Svg, { Polyline } from "react-native-svg";
 import LoadingOverlay from "../components/LoadingPage";
+import { router } from "expo-router";
 import { UserContext } from "../contexts/UserContext";
 import { calculateHits, interpolatePaths } from "../utils/accuracyCalculator";
 import { createSvg } from "../utils/pathPlotter";
@@ -25,7 +26,7 @@ export default function ResultsScreen() {
     user: { svgString: "" },
     target: { svgString: "" },
   });
-  const navigation = useNavigation();
+
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -80,12 +81,19 @@ export default function ResultsScreen() {
     } catch (error) {
       console.log(error);
     }
-    navigation.navigate("(tabs)", { screen: "stats" });
+    router.push({
+      pathname: "/stats"
+    });
   };
 
-  const handleRetry = () => {
-    navigation.navigate("map");
-  };
+   const handleRetry = () => {
+    router.push({
+      pathname: "/map",
+      params: {
+        shape: JSON.stringify(selectedShape),
+      },
+    });
+  }
 
   const handleShare = async () => {
     try {
