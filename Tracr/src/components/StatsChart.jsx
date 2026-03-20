@@ -8,7 +8,7 @@ export default function StatsChart({ data, dateRange, timeframe, metric }) {
 
   console.log("data in stats chart>>", data);
 
-  const week = ["mon", "tue", "wed", "thur", "fri", "sat", "sun"];
+  const week = ["sun", "mon", "tue", "wed", "thur", "fri", "sat"];
   const month = [
     "1st",
     "2nd",
@@ -62,13 +62,23 @@ export default function StatsChart({ data, dateRange, timeframe, metric }) {
     const dataPoints = data.map((dataPoint, i) => {
       if (timeframe === "week") {
         setSpaces(7);
-        return { value: dataPoint, label: week[i] };
+        return {
+          value: dataPoint.data,
+          label: week[new Date(dataPoint.timestamp).getDay()],
+        };
       } else if (timeframe === "month") {
         setSpaces(30);
-        return { value: dataPoint, label: month[i] };
+        return {
+          value: dataPoint.data,
+          label: month[Number(dataPoint.timestamp.slice(8, 10)) - 1],
+        };
       } else if (timeframe === "year") {
         setSpaces(12);
-        return { value: dataPoint, label: year[i] };
+        console.log("year??>>", dataPoint.timestamp);
+        return {
+          value: dataPoint.data,
+          label: dataPoint.month,
+        };
       }
       return { value: dataPoint, label: i + 1 };
     });
