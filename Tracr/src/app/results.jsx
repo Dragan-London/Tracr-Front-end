@@ -229,7 +229,7 @@ export default function ResultsScreen() {
           <Polyline
             points={svgData.target.svgString}
             fill="none"
-            stroke="red"
+            stroke="blue"
             strokeWidth="4"
           />
         </AnimatedSvg>
