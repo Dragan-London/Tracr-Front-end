@@ -1,17 +1,17 @@
-import LoadingPage from "@/src/components/LoadingPage";
 import PopUp from "@/src/components/PopUp";
 import { Text } from "@react-navigation/elements";
 import * as Location from "expo-location";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  useAnimatedValue,
-  View,
+	Animated,
+	Pressable,
+	StyleSheet,
+	useAnimatedValue,
+	View,
 } from "react-native";
 import MapView, { Polyline } from "react-native-maps";
+import LoadingOverlay from "../components/LoadingPage"
 
 export default function MapScreen() {
 	const [region, setRegion] = useState(null);
@@ -51,8 +51,15 @@ export default function MapScreen() {
 	const scaleAnim = useAnimatedValue(1);
 	const opacityAnim = useAnimatedValue(1);
 
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
-		if (countdown === 0) return;
+		const timer = setTimeout(() => setLoading(false), 1200);
+		return () => clearTimeout(timer);
+	}, []);
+
+	useEffect(() => {
+    if (loading || countdown === 0) return;
 
 		scaleAnim.setValue(1);
 		opacityAnim.setValue(1);
@@ -73,7 +80,7 @@ export default function MapScreen() {
 				useNativeDriver: true,
 			}),
 		]).start();
-	}, [countdown]);
+	}, [loading, countdown]);
 
 	async function watchPosition() {
 		if (locationRef.current) return;
@@ -134,7 +141,7 @@ export default function MapScreen() {
 	}, []);
 
 	useEffect(() => {
-		if (trackingStarted) return;
+		if (loading || trackingStarted) return;
 
 		const interval = setInterval(() => {
 			setCountdown((prev) => {
@@ -142,6 +149,7 @@ export default function MapScreen() {
 					watchPosition();
 					setTrackingStarted(true);
 					resumeTimer();
+					clearInterval(interval);
 					return 0;
 				}
 
@@ -150,7 +158,7 @@ export default function MapScreen() {
 		}, 1300);
 
 		return () => clearInterval(interval);
-	}, [trackingStarted]);
+	}, [loading, trackingStarted]);
 
 	const stopWatching = () => {
 		if (!locationRef.current) return;
@@ -165,7 +173,9 @@ export default function MapScreen() {
 		setModalVisible(true);
 	};
 
-	if (isLoading) return <LoadingPage />;
+	if (loading) {
+      return <LoadingOverlay visible={true} />;
+    }
 
 	return (
 		<View style={styles.container}>
