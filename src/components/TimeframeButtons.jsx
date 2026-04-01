@@ -3,11 +3,11 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 export default function TimeframeButtons({ timeframe, setTimeframe }) {
   function weekPressed() {
-    setTimeframe("week");
+    setTimeframe("7 days");
   }
 
   function monthPressed() {
-    setTimeframe("month");
+    setTimeframe("30 days");
   }
 
   function yearPressed() {
@@ -21,7 +21,7 @@ export default function TimeframeButtons({ timeframe, setTimeframe }) {
         style={({ pressed }) => [
           styles.button,
           pressed && styles.buttonPressed,
-          timeframe === "week" && styles.buttonIsActive,
+          timeframe === "7 days" && styles.buttonIsActive,
         ]}
       >
         <Text style={styles.buttonText}>Week</Text>
@@ -31,7 +31,7 @@ export default function TimeframeButtons({ timeframe, setTimeframe }) {
         style={({ pressed }) => [
           styles.button,
           pressed && styles.buttonPressed,
-          timeframe === "month" && styles.buttonIsActive,
+          timeframe === "30 days" && styles.buttonIsActive,
         ]}
       >
         <Text style={styles.buttonText}>Month</Text>
