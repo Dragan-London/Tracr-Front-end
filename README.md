@@ -24,7 +24,7 @@ Using GPS tracking, the app records the user’s path and compares it to the cho
 * **Expo** – Simplified development and deployment
 * **Expo Router** – Navigation and routing
 
-### Backend
+### [Backend](https://github.com/S-Kirwan/Tracr-backend)
 
 * **Express.js** – REST API server
 * **PostgreSQL** – Database for users, routes, and shapes
